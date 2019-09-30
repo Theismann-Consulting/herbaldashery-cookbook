@@ -1,4 +1,4 @@
-# Herbaldashery Cookbook
+# Herbaldashery Cookbook --React Version
 
 [Trello Board](https://trello.com/b/JRagqZE3/p4-cookbook-react)
 
