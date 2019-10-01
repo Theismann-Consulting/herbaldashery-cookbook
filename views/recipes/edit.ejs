@@ -1,0 +1,55 @@
+<%- include('../partials/header') %>
+
+<form id="new-form" action="/recipes/<%= recipe._id %>?_method=PUT" method="POST" autocomplete="off">
+  <input type="text" name="name" value="<%= recipe.name %>">
+  <label>Recipe Name:</label>
+  <input type="text" name="category" value="<%= recipe.category %>">
+  <label> Category</label>
+  <input type="text" name="prepTime" required="/^\d{1,} min$/" placeholder="ex. 123 min" value="<%= recipe.prepTime %>">
+  <label>Prep Time:</label>
+  <input type="text" name="cookTime" required="/^\d{1,} min$/" placeholder="ex. 136 min" value="<%= recipe.cookTime %>">
+  <label>Cook Time:</label>
+  <input type="text" name="description" placeholder="Describe the dish!" value="<%= recipe.description %>">
+  <label>Description:</label>
+  <br/>
+  <label>Instructions:</label>
+  <input type="hidden" name="instructions">
+  <input type="hidden" name="instructionsHtml">
+  <input type="hidden" name="instructionsString">
+  <div id="editor">
+  </div>
+  <!-- <label>Ingredients:</label>
+  <input type="text" name="measurement">
+  <select name="ingredients">
+    <option></option>
+  </select> -->
+  <input type="submit" class="btn-small left" value="Next: Ingredients">
+</form>
+<script>
+
+const quill = new Quill('#editor', {
+  modules: {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      ['link', 'image', 'code-block'],
+      [{ list: 'ordered' }, { list: 'bullet' }]
+    ]
+  },
+  placeholder: 'What steps are needed to make the recipe...',
+  theme: 'snow',
+});
+
+quill.setContents( <%- recipe.instructions %> );
+
+const form = document.querySelector('form');
+    form.onsubmit = function() {
+    const instructions = document.querySelector('input[name=instructions]');
+    const instructionsHtml = document.querySelector('input[name=instructionsHtml]');
+    const instructionsString = document.querySelector('input[name=instructionsString]');
+    instructions.value = JSON.stringify(quill.getContents());
+    instructionsHtml.value = quill.root.innerHTML;
+    instructionsString.value = quill.getText();
+    };
+</script>
+
+<%- include('../partials/footer') %>

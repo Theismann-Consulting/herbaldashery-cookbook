@@ -1,0 +1,30 @@
+<%- include('../partials/header') %>
+<div class="container">
+    <a href="/mealplans/new" class="btn-small left">Create Meal Plan</a>
+  <div class="row">
+    <div id="mealPlans" class="col s12 m6">
+      <% mealPlans.forEach(function(mealPlan) { %>
+        <% if (mealPlan.owner.toString() === contributor._id.toString() || mealPlan.assignedUsers.includes(contributor._id)){ %>
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title"><%= mealPlan.name %></span>
+              <p><%= mealPlan.description %></p>
+              <ul>
+                <h6>Recipes in the Meal Plan:</h6>
+                <% recipes.forEach(function(recipe){ %>
+                  <% if (recipe.mealPlan.includes(mealPlan._id)){ %>
+                  <li><%= recipe.name %></li>
+                  <% }; %>
+                <% }); %>
+              </ul>
+              <div class="card-action">
+                  <a href="/mealplans/<%= mealPlan._id %>" class="btn-small" >View Meal Plan</a>
+              </div>
+            </div>
+          </div>
+        <% }; %>
+      <% }); %>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

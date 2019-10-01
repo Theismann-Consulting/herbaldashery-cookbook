@@ -1,0 +1,48 @@
+<%- include('../partials/header') %>
+<div class="container">
+
+<label>Meal Plan Name:</label>
+<p>
+  <%= mealPlan.name %><br>
+</p>
+<label>Description:</label>
+<p>
+  <%= mealPlan.description %>
+</p>
+<label>Recipes:</label>
+<% if (!recipes || recipes !== undefined) { %>
+    <% recipes.forEach(function(r) { %>
+        <table>
+            <form id="recipesForm" action="/mealplans/<%= mealPlan._id%>/recipes?_method=DELETE" method="POST">
+                <tr>
+                    <td>
+                        <%= r.name %><input type="hidden" name="recipeId" value="<%= r._id %>"/>
+                    </td>
+                    <td><input type="submit" class="btn-small left" value="X" /></td>
+                </tr>
+            </form>
+        </table>
+        <% }); %>
+            <% }; %>
+            <form id="add-recipe-to-mealplan" action="/mealplans/<%= mealPlan._id%>/recipes" method="POST">
+              <div class="row">
+              <select class ="browser-default" name="recipe">
+                <option value="" disabled selected>Select Recipes</option>
+                <% allRecipes.forEach(function (r){ %>
+                  <option value=<%= `${r._id}` %>><%= r.name %></option>
+                <% }); %>
+              </select>
+              <input class="btn-small left" type="submit" value="Add to Meal Plan"/>
+            </div>
+            </form>
+
+<a class="btn-small left" href="/mealplans/<%= mealPlan._id %>/users">Add Users</a>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems, options);
+  });
+</script>
+
+<%- include('../partials/footer') %>

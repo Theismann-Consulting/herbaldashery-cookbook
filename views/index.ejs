@@ -1,0 +1,19 @@
+<%- include('./partials/header') %>
+<div class="align-center"></div>
+<h1>Welcome to the Herbaldashery CookBook!!</h1>
+<% if (contributor) { %>
+ <h2>Thank you for supporting Herbaldashery</h2>
+<% } else { %>
+  <div class="container">
+  <ol>
+    <h6>Login Instructions</h6>
+    <li>Create Account Using Button Below (if you do not already have an account)</li>
+    <li>Login Using Email Address that you created the account with.</li>
+    <li>Enjoy!</li>
+  </ol>
+  <br />
+  <a class="btn-small left" href="/users/add">Create Account</a>
+  </div>
+<% }; %>
+</div>
+<%- include('./partials/footer') %>

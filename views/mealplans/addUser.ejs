@@ -1,0 +1,44 @@
+<%- include('../partials/header') %>
+
+<label>Meal Plan Name:</label>
+<%= mealPlan.name %><br>
+<label>Description:</label>
+<p>
+  <%= mealPlan.description %>
+</p>
+<label>Recipes:</label><br />
+<% if (!recipes || recipes !== undefined) { %>
+    <% recipes.forEach(function(r) { %>
+        <%= r.name %><br />
+    <% }); %>
+<% }; %>
+<label>Users:</label><br />
+<% if (!users || users !== undefined) { %>
+  <table>
+      <% users.forEach(function(u) { %>
+      <form id="usersForm" action="/mealplans/<%= mealPlan._id%>/users?_method=DELETE" method="POST">
+          <tr>
+              <td>
+                  <%= u.name %><input type="hidden" name="userId" value="<%= u._id %>"/>
+              </td>
+              <td><input type="submit" class="btn-small left" value="X" /></td>
+          </tr>
+      </form>
+      <% }); %>
+  </table>
+<% }; %>
+<form id="add-user-to-mealplan" action="/mealplans/<%= mealPlan._id%>/users" method="POST">
+  <div class="row">
+  <select class ="browser-default" name="user">
+    <option value="" disabled selected>Select User</option>
+    <% allUsers.forEach(function (u){ %>
+      <option value=<%= `${u._id}` %>><%= u.name %></option>
+    <% }); %>
+  </select>
+  <input class="btn-small left" type="submit" value="Assign Meal Plan to User"/>
+</div>
+</form>
+
+<a class="btn-small left" href="/mealplans/<%= mealPlan._id %>">Finished</a>
+
+<%- include('../partials/footer') %>

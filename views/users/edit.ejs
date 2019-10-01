@@ -1,0 +1,28 @@
+<%- include('../partials/header') %>
+<div class="container">
+
+  <form id="new-form" action="/users/<%= user._id %>?_method=PUT" method="POST">
+    <input type="text" name="name" value="<%= user.name %>" autocomplete="off">
+    <label>Name:</label>
+    <input type="text" name="email" value="<%= user.email %>" autocomplete="off" required="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$">
+    <label>Email:</label><br/>
+    <label>User Role:</label><br/> 
+      Currently <strong><%= user.role %></strong> (Please Reselect Role Below)
+      <p><label><input class="with-gap" type="radio" name="role" value="User" checked /><span>User</span></label></p>
+      <p><label><input class="with-gap" type="radio" name="role" value="Contributor" /><span>Contributor</span></label></p>
+      <p><label><input class="with-gap" type="radio" name="role" value="Admin" /><span>Admin (Do Not Use)</span></label></p>
+    <label>Account Status:</label><br/>
+    Currently <strong>
+      <% if (user.active === true){ %>
+        Active 
+      <% } else if (user.active === false){ %>
+        In-Active
+      <% }; %>
+      </strong> (Please Reselect Role Below)
+      <p><label><input class="with-gap" type="radio" name="active" value="true" checked /><span>Active</span></label></p>
+      <p><label><input class="with-gap" type="radio" name="active" value="false" /><span>Archive (In-Active)</span></label></p>
+    <input type="submit" class="btn-small left" value="Submit">
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

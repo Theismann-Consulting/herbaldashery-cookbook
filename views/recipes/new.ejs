@@ -1,0 +1,52 @@
+<%- include('../partials/header') %>
+
+<form id="new-form" action="/recipes" method="POST">
+  <input type="text" name="name" autocomplete="off">
+  <label>Recipe Name:</label>
+  <input type="text" name="category" autocomplete="off">
+  <label> Category</label>
+  <input type="text" name="prepTime" required="/^\d{1,} min$/" placeholder="ex. 123 min" autocomplete="off">
+  <label>Prep Time:</label>
+  <input type="text" name="cookTime" required="/^\d{1,} min$/" placeholder="ex. 136 min" autocomplete="off">
+  <label>Cook Time:</label>
+  <input type="text" name="description" placeholder="Describe the dish!" autocomplete="off">
+  <label>Description:</label>
+  <br/>
+  <label>Instructions:</label>
+  <input type="hidden" name="instructions">
+  <input type="hidden" name="instructionsHtml">
+  <input type="hidden" name="instructionsString">
+  <div id="editor">
+  </div>
+  <!-- <label>Ingredients:</label>
+  <input type="text" name="measurement">
+  <select name="ingredients">
+    <option></option>
+  </select> -->
+  <input type="submit" class="btn-small left" value="Next: Ingredients">
+</form>
+<script>
+    const quill = new Quill('#editor', {
+      modules: {
+        toolbar: [
+          ['bold', 'italic', 'underline'],
+          ['link', 'image', 'code-block'],
+          [{ list: 'ordered' }, { list: 'bullet' }]
+        ]
+      },
+      placeholder: 'What steps are needed to make the recipe...',
+      theme: 'snow',
+    });
+
+    const form = document.querySelector('form');
+    form.onsubmit = function() {
+    const instructions = document.querySelector('input[name=instructions]');
+    const instructionsHtml = document.querySelector('input[name=instructionsHtml]');
+    const instructionsString = document.querySelector('input[name=instructionsString]');
+    instructions.value = JSON.stringify(quill.getContents());
+    instructionsHtml.value = quill.root.innerHTML;
+    instructionsString.value = quill.getText();
+    };
+      </script>
+
+<%- include('../partials/footer') %>

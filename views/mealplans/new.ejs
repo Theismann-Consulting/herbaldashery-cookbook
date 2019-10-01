@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+
+<form id="new-form" action="/mealplans" method="POST">
+  <input type="text" name="name" autocomplete="off">
+  <label>Meal Plan Name:</label>
+  <input type="text" name="description" placeholder="Describe the dish!" autocomplete="off">
+  <input type="hidden" name="owner" value="<%= contributor._id %>"/>
+  <label>Description:</label>
+  <br/>
+  <input type="submit" class="btn-small left" value="Next: Add Recipes">
+</form>
+<script>
+    const quill = new Quill('#editor', {
+      modules: {
+        toolbar: [
+          ['bold', 'italic', 'underline'],
+          ['link', 'image', 'code-block'],
+          [{ list: 'ordered' }, { list: 'bullet' }]
+        ]
+      },
+      placeholder: 'What steps are needed to make the Meal Plan...',
+      theme: 'snow',
+    });
+
+    const form = document.querySelector('form');
+    form.onsubmit = function() {
+    const instructions = document.querySelector('input[name=instructions]');
+    const instructionsHtml = document.querySelector('input[name=instructionsHtml]');
+    const instructionsString = document.querySelector('input[name=instructionsString]');
+    instructions.value = JSON.stringify(quill.getContents());
+    instructionsHtml.value = quill.root.innerHTML;
+    instructionsString.value = quill.getText();
+    };
+      </script>
+
+<%- include('../partials/footer') %>

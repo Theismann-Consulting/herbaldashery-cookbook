@@ -1,0 +1,26 @@
+<%- include('../partials/header') %>
+
+<form id="new-form" action="/users" method="POST">
+  <input type="text" name="name" autocomplete="off">
+  <label>Name:</label>
+  <input type="text" name="email" autocomplete="off" required="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$">
+  <label>Email:</label>
+  <br/>
+  <label>User Role:</label>
+  <div class="container">
+    <p><label><input class="with-gap" type="radio" name="role" value="User" checked /><span>User</span></label></p>
+    <p><label><input class="with-gap" type="radio" name="role" value="Contributor" /><span>Contributor</span></label></p>
+    <p><label><input class="with-gap" type="radio" name="role" value="Admin" /><span>Admin (Do Not Use)</span></label></p>
+  </div>
+  <input type="submit" class="btn-small left" value="Submit">
+</form>
+<div class="container">
+  User Role Definitions:
+  <ul>
+    <li>User: A User has access to read/view recipes and their own account.</li>
+    <li>Contributor: A Contributor has access to read/view, create and edit recipes and their own account.</li>
+    <li>Admin: An Admin has access to read/view, create and edit all recipes and users.</li>
+  </ul>
+</div>
+
+<%- include('../partials/footer') %>
