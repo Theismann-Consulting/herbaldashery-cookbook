@@ -1,5 +1,7 @@
 # Herbaldashery Cookbook
 
+## Intro
+
 ##### [Trello Board](https://trello.com/b/JRagqZE3/p4-cookbook-react)
 
 ![Trello](https://github.com/atheismann/herbaldashery-cookbook/blob/master/public/readme_images/trello.png)
@@ -13,8 +15,6 @@
 ![ERD](https://www.lucidchart.com/publicSegments/view/4933d51e-2664-454d-b6dd-dc6177ae394a/image.png)
 
 ##### [Herbaldashery Cookbook Website](https://herbaldashery-cookbook.herokuapp.com)
-
-## Intro
 
 ## Technologies
 
