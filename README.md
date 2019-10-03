@@ -14,6 +14,7 @@
 ## Intro
 
 ## Technologies
+
 * MongoDB Atlas
 * Express
 * React.js
