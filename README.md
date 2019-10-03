@@ -8,11 +8,17 @@
 
 [Herbaldashery Cookbook Website](https://herbaldashery-cookbook.herokuapp.com)
 
-
-
 ## Intro
 
 ## Technologies
+* MongoDB Atlas
+* Express
+* React.js
+* Node.js
+* HTML
+* CSS
+* JavaScript
+* Heroku
 
 ## Getting Started
 
