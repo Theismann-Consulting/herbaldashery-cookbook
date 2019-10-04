@@ -35,3 +35,7 @@ button:focus, .btn:focus {
   font-size: 18px;
   text-align: center;
 }
+
+.body{
+  margin: 20px;
+}

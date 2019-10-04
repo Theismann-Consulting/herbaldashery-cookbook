@@ -11,9 +11,9 @@ router.post('/login', usersCtrl.login);
 // router.use(require('../../config/auth'));
 
 router.post('/signup', usersCtrl.signup);
-// router.get('/', usersCtrl.index);
+router.get('/', usersCtrl.index);
 // router.get('/add', usersCtrl.new);
-// router.get('/:id', usersCtrl.show);
+router.get('/:id', usersCtrl.show);
 // router.get('/:id/edit', usersCtrl.edit);
 // router.put('/:id', usersCtrl.update);
 // router.delete('/:id', usersCtrl.delete);

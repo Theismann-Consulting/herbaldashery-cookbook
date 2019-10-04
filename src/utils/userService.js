@@ -19,7 +19,7 @@ function signup(user) {
   //.then((token) => token.token);
 }
 
-function getUser() {
+function getCurrUser() {
   return tokenService.getUserFromToken();
 }
 
@@ -41,8 +41,34 @@ function login(creds) {
   .then(({token}) => tokenService.setToken(token));
 }
 
+function getUsers(){
+  return fetch(BASE_URL + '', {
+    method: 'get',
+    headers: new Headers({'Content-Type': 'application/json'}),
+  })
+  .then(res => {
+    // Valid login if we have a status of 2xx (res.ok)
+    if (res.ok) return res.json();
+    throw new Error('Not Authorized');
+  });
+}
+
+function getUser(userId){
+  return fetch(BASE_URL + `${userId}`, {
+    method: 'get',
+    headers: new Headers({'Content-Type': 'application/json'}),
+  })
+  .then(res => {
+    // Valid login if we have a status of 2xx (res.ok)
+    if (res.ok) return res.json();
+    throw new Error('Not Authorized');
+  });
+}
+
 export default {
   signup, 
+  getCurrUser,
+  getUsers,
   getUser,
   logout,
   login
