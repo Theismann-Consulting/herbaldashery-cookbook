@@ -15,8 +15,8 @@ router.get('/', usersCtrl.index);
 // router.get('/add', usersCtrl.new);
 router.get('/:id', usersCtrl.show);
 // router.get('/:id/edit', usersCtrl.edit);
-// router.put('/:id', usersCtrl.update);
-// router.delete('/:id', usersCtrl.delete);
+router.put('/:id', usersCtrl.update);
+router.delete('/:id', usersCtrl.delete);
 
 /*----- Helper Functions -----*/
 

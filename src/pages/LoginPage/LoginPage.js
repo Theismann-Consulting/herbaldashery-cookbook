@@ -8,7 +8,8 @@ class LoginPage extends Component {
   
   state = {
     email: '',
-    pw: ''
+    pw: '',
+    message: '',
   };
 
   handleChange = (e) => {
@@ -27,9 +28,12 @@ class LoginPage extends Component {
       // Successfully signed up - show GamePage
       this.props.history.push('/');
     } catch (err) {
-      // Use a modal or toast in your apps instead of alert
-      alert('Invalid Credentials!');
+      this.updateMessage(err.message);
     }
+  }
+
+  updateMessage = (msg) => {
+    this.setState({message: msg});
   }
 
   render() {
@@ -54,6 +58,7 @@ class LoginPage extends Component {
             </div>
           </div>
         </form>
+        <p>{this.state.message}</p>
       </div>
     );
   }

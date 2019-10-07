@@ -7,16 +7,16 @@ module.exports = {
   login,
   index,
   // edit,
-  // update,
+  update,
   show,
-  // delete :deleteUser
+  delete :deleteUser
 };
 
 
 async function index(req, res, next) {
   try {
     await User.find({}, function (err, users){
-        res.json({ users });
+      res.json({ users });
     });
   } catch (err) {
     res.status(400).json(err);
@@ -27,11 +27,25 @@ async function show(req, res) {
   try {
     await User.findById(req.params.id, function(err, user) {
         res.json({ user });
-        console.log('Controller:', user);
     });
   } catch(err) {
     res.status(400).json(err);
   }
+};
+
+async function update(req, res) {
+  await User.findById(req.params.id, function(err, user){
+    user.name = req.body.name;
+    user.email = req.body.email;
+    user.password = req.body.password;
+    user.role = req.body.role;
+    try {
+      user.save();
+      res.json({ user });
+    } catch(err) {
+      res.status(400).json(err);
+    }
+  });
 };
 
 // function newUser(req, res) {
@@ -63,20 +77,19 @@ async function show(req, res) {
 //   });
 // }
 
-// function update(req, res) {
-//   console.log(req.body);
-//   User.findByIdAndUpdate({ _id: req.params.id }, req.body, function(err, user){
-//       res.redirect(`/users/${user._id}`);
-//   });
-// };
 
-// function deleteUser(req, res, next) {
-//   User.findByIdAndDelete(req.params.id, function(err) {
-//       res.redirect('/users');
-//   });
-// };
+async function deleteUser(req, res, next) {
+  try {
+    await User.findByIdAndDelete(req.params.id, function(err, user) {
+      res.json({ user });
+  });
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
 
 async function signup(req, res) {
+  console.log(req.body);
   const user = new User(req.body);
   try {
     await user.save();

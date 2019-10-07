@@ -5,10 +5,10 @@ import userService from '../../utils/userService';
 import UserEditPage from '../UserEditPage/UserEditPage';
 
 const UsersPage = (props) => {
-  console.log(props)
 
   return (
     <div className="body">
+      <Button className="float-right" variant="info" as={ Link } to='/signup'>Create User</Button>
       {props.users.map((user, idx) =>
       
       <Card style={{ width: '18rem' }}>

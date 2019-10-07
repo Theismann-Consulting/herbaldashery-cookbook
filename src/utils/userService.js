@@ -19,6 +19,18 @@ function signup(user) {
   //.then((token) => token.token);
 }
 
+function update(user, userId) {
+  return fetch(BASE_URL + `${userId}`, {
+    method: 'PUT',
+    headers: new Headers({'Content-Type': 'application/json'}),
+    body: JSON.stringify(user)
+  })
+  .then(res => {
+    if (res.ok) return res.json();
+    throw new Error('Unable to Update!');
+  })
+}
+
 function getCurrUser() {
   return tokenService.getUserFromToken();
 }
@@ -65,11 +77,25 @@ function getUser(userId){
   });
 }
 
+function deleteUser(userId){
+  return fetch(BASE_URL + `${userId}`, {
+    method: 'delete',
+    headers: new Headers({'Content-Type': 'application/json'}),
+  })
+  .then(res => {
+    // Valid login if we have a status of 2xx (res.ok)
+    if (res.ok) return res.json();
+    throw new Error('Not Authorized');
+  });
+}
+
 export default {
   signup, 
   getCurrUser,
   getUsers,
   getUser,
   logout,
-  login
+  login,
+  update,
+  delete: deleteUser,
 };
