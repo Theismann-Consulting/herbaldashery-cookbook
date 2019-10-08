@@ -13,11 +13,9 @@ class App extends Component {
     super();
     this.state = {
       user: '',
-      users: [],
       // recipes: recipeService.getRecipes(),
     }
   }
-
 
   handleLogout = () => {
     userService.logout();
@@ -28,10 +26,12 @@ class App extends Component {
     this.setState({user: userService.getCurrUser()});
   }
 
-  async componentDidMount(){
-    const users = await userService.getUsers();
-    this.setState({ users: users.users });
-  };
+  async updateUsers(nextState){
+    if (nextState.users === this.state.users) {
+      const users = await userService.getUsers();
+      this.setState({ users: users.users });
+    }
+  }
 
   render() {
     return (
