@@ -16,6 +16,11 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 // Put API routes here, before the "catch all" route
 app.use('/api/users', require('./routes/api/users'));
+app.use('/api/recipes', require('./routes/api/recipes'));
+app.use('/api/ingredients', require('./routes/api/ingredients'));
+app.use('/api/mealPlans', require('./routes/api/mealPlans'));
+app.use('/api/categories', require('./routes/api/categories'));
+
 
 // The following "catch all" route (note the *)is necessary
 // for a SPA's client-side routing to properly work

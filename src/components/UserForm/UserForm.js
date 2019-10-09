@@ -16,7 +16,7 @@ class UserForm extends Component {
   };
 
   async componentDidMount(){
-    console.log(this.props);
+
     if(this.props.match && this.props.match.params.id) {
       const user = await userService.getUser(this.props.match.params.id);
       this.setState({

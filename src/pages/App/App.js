@@ -5,6 +5,9 @@ import UsersPage from '../UsersPage/UsersPage';
 import LoginPage from '../LoginPage/LoginPage';
 import UserViewPage from '../UserViewPage/UserViewPage';
 import UserEditPage from '../UserEditPage/UserEditPage';
+import RecipesPage from '../RecipesPage/RecipesPage';
+import RecipeViewPage from '../RecipeViewPage/RecipeViewPage';
+import RecipeEditPage from '../RecipeEditPage/RecipeEditPage';
 import userService from '../../utils/userService';
 import Navigation from '../../components/Navigation/Navigation';
 
@@ -24,13 +27,6 @@ class App extends Component {
 
   handleSignupOrLogin = () => {
     this.setState({user: userService.getCurrUser()});
-  }
-
-  async updateUsers(nextState){
-    if (nextState.users === this.state.users) {
-      const users = await userService.getUsers();
-      this.setState({ users: users.users });
-    }
   }
 
   render() {
@@ -59,7 +55,6 @@ class App extends Component {
             <Route exact path='/users' render={({ history }) =>
               <UsersPage
                 history={history}
-                users={this.state.users}
                 user={this.state.user}
               />
             }/>    
@@ -67,7 +62,6 @@ class App extends Component {
               <UserViewPage
                 {...props}
                 history={props.history}
-                users={this.state.users}
                 user={this.state.user}
               />
             }/>      
@@ -76,10 +70,41 @@ class App extends Component {
               <UserEditPage
                 {...props}
                 history={props.history}
-                users={this.state.users}
                 user={this.state.user}
               />
             }/>    
+            
+            <Route exact path='/recipes' render={({ history }) =>
+              <RecipesPage
+                history={history}
+                user={this.state.user}
+              />
+            }/>    
+
+            <Route exact path='/recipes/new' render={(props) => 
+              <RecipeEditPage
+                {...props}
+                history={props.history}
+                user={this.state.user}
+              />
+            }/>  
+              
+            <Route exact path='/recipes/:id' render={(props) => 
+              <RecipeViewPage
+                {...props}
+                history={props.history}
+                user={this.state.user}
+              />
+            }/>      
+
+            <Route exact path='/recipes/:id/edit' render={(props) => 
+              <RecipeEditPage
+                {...props}
+                history={props.history}
+                user={this.state.user}
+              />
+            }/>    
+
 
           </Switch>
       </div>

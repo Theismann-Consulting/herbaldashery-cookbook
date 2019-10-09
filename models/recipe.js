@@ -4,7 +4,7 @@ const recipeSchema = new mongoose.Schema({
     name: String,
     prepTime: String,
     cookTime: String,
-    instructions: String,
+    instructions: Object,
     instructionsHtml: String,
     instructionsString: String,
     ingredients: [{
@@ -16,13 +16,13 @@ const recipeSchema = new mongoose.Schema({
       ref: 'User',
     },
     category: [{
-      type: String,
-      default: 'Unassigned',
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Catgory',
     }],
     description: String,
     mealPlan: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'MealPlan',
     }],
 }, {
     timestamps: true,

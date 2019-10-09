@@ -6,7 +6,6 @@ module.exports = {
   signup,
   login,
   index,
-  // edit,
   update,
   show,
   delete :deleteUser
@@ -47,36 +46,6 @@ async function update(req, res) {
     }
   });
 };
-
-// function newUser(req, res) {
-//   res.render('users/add', {
-//       contributor: req.user,
-//     });
-// }
-
-// function create(req, res, next){
-//   const user = new User(req.body);
-//   user.save(function(err) {
-//       if (err) {return res.render('users/new', {
-//           contributor: req.user
-//       })};
-//       if (req.isAuthenticated()){
-//         res.redirect('/users');
-//       } else {
-//         res.redirect('/');
-//       }
-//   });
-// };
-
-// function edit(req, res){
-//   User.findById({ _id: req.params.id }, function(err, user){
-//     res.render('users/edit', {
-//       user,
-//       contributor: req.user,
-//     });
-//   });
-// }
-
 
 async function deleteUser(req, res, next) {
   try {

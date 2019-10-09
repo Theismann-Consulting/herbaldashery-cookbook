@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ingredientsCtrl = require('../controllers/ingredients');
+const ingredientsCtrl = require('../../controllers/ingredients');
 
 /*---------- Public Routes ----------*/
 
@@ -10,9 +10,11 @@ const ingredientsCtrl = require('../controllers/ingredients');
 
 // router.use(require('../../config/auth'));
 
-// router.post('/', ingredientsCtrl.create);
-// router.put('/:id', ingredientsCtrl.update)
-// router.delete('/:id', ingredientsCtrl.delete);
+router.post('/', ingredientsCtrl.create);
+router.get('/', ingredientsCtrl.index);
+router.get('/:id', ingredientsCtrl.show);
+router.put('/:id', ingredientsCtrl.update)
+router.delete('/:id', ingredientsCtrl.delete);
 
 /*----- Helper Functions -----*/
 

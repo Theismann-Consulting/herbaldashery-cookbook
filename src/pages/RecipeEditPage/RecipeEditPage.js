@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import UserForm from '../../components/UserForm/UserForm';
+import RecipeForm from '../../components/RecipeForm/RecipeForm';
 
-class UserEditPage extends Component {
+class RecipeEditPage extends Component {
   constructor(props) {
     super(props);
     this.state = {message: ''}
@@ -14,11 +14,11 @@ class UserEditPage extends Component {
   render() {
     return (
       <div className='UserEditPage'>
-        <UserForm {...this.props} updateMessage={this.updateMessage} />
+        <RecipeForm {...this.props} updateMessage={this.updateMessage} />
         <p>{this.state.message}</p>
       </div>
     );
   }
 }
 
-export default UserEditPage;
+export default RecipeEditPage;

@@ -17,7 +17,7 @@ class UsersPage extends Component {
     async componentDidUpdate(prevProps, prevState){
     if (this.state.users.users !== prevState.users.users) {
       const users = await userService.getUsers();
-      console.log(users);
+
       this.setState({ users: users.users });
     }
   }
