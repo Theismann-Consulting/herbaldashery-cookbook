@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
 import { Card, Button, ListGroup, ListGroupItem, Table, Row, Col } from 'react-bootstrap';
 import recipeService from '../../utils/recipeService';
-import RecipeIngredients from '../../components/RecipeIngredients/RecipeIngredients';
+import ingredientService from '../../utils/ingredientService';
+import RecipeIngredients from '../../components/RecipeIngredients';
 
 class RecipeViewPage extends Component {
   state = {
@@ -12,7 +13,9 @@ class RecipeViewPage extends Component {
 
   async componentDidMount() {
     const recipe = await recipeService.getRecipe(this.props.match.params.id);
-    this.setState({recipe: recipe.recipe});
+    this.setState({
+      recipe: recipe.recipe,
+    });
   };
 
   updateMessage = (msg) => {
@@ -26,10 +29,15 @@ class RecipeViewPage extends Component {
         this.props.history.push('/recipes');
       };
     } catch (err) {
-      // Invalid recipe data (probably duplicate email)
       this.updateMessage(err.message);
     }
   }
+
+  getName = async (i) => {
+   let ingredient = await ingredientService.getIngredient(i);
+   console.log(ingredient);
+   return ingredient.ingredient.name;
+  };
 
   render() {
     return (
@@ -58,7 +66,7 @@ class RecipeViewPage extends Component {
               <Row>
               <Col className="font-weight-bold">Ingredients:</Col>
               </Row>
-                <RecipeIngredients state={this.state} />
+              <RecipeIngredients state={this.state} />
             </ListGroupItem>
           </ListGroup>
           <Card.Body>

@@ -1,15 +1,13 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { isProperty } from '@babel/types';
 
 const RecipeIngredients = (props) =>{
-  let ingredients = props.state.recipe.ingredients > 0 ?
-    props.state.recipe.ingredients.map((i) => 
+  let ingredients = props.state.recipe.ingredients ?
+    props.state.recipe.ingredientsAmount.map((a, idx) =>
       <Row>
-        <Col>{i.amount}</Col>
-        <Col>{i.name}</Col>
-      </Row>
-    )
+        <Col>{a}</Col> 
+        <Col>{props.state.recipe.ingredients[idx].name}</Col>
+      </Row>)
     :
     "No Ingredients"
 

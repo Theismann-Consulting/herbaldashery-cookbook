@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, Container, Toast } from 'react-bootstrap';
-import ingredientService from '../../utils/ingredientService';
+import ingredientService from '../utils/ingredientService';
 import 'react-quill/dist/quill.snow.css';
 
 

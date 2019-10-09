@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import RecipeForm from '../../components/RecipeForm/RecipeForm';
+import RecipeForm from '../../components/RecipeForm';
 
 class RecipeEditPage extends Component {
   constructor(props) {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UserForm from '../../components/UserForm/UserForm';
+import UserForm from '../../components/UserForm';
 
 class UserEditPage extends Component {
   constructor(props) {

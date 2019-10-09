@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Form, Container, Col } from 'react-bootstrap';
-import recipeService from '../../utils/recipeService';
-import ingredientService from '../../utils/ingredientService';
-import categoryService from '../../utils/categoryService';
-import mealPlanService from '../../utils/mealPlanService';
+import recipeService from '../utils/recipeService';
+import ingredientService from '../utils/ingredientService';
+import categoryService from '../utils/categoryService';
+import mealPlanService from '../utils/mealPlanService';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import IngredientForm from '../IngredientForm/IngredientForm';
-import { thisExpression } from '@babel/types';
+import IngredientForm from './IngredientForm';
 
 
 class RecipeForm extends Component {
@@ -22,7 +21,7 @@ class RecipeForm extends Component {
     instructionsString: '',
     ingredients: [],
     ingredientsAmount: [],
-    ingredientsList: [],
+    ingredientsName: [],
     contributor: '',
     category: [],
     description: '',
@@ -33,7 +32,7 @@ class RecipeForm extends Component {
     allMealPlans: [],
     message: '',
     ingredientForm: false,
-    ingredientsInput: '',
+    ingredientsInput: {},
     ingredientsAmountInput: '',
   };
 
@@ -74,13 +73,12 @@ class RecipeForm extends Component {
     })
     if(this.props.match && this.props.match.params.id) {
       const recipe = await recipeService.getRecipe(this.props.match.params.id);
-      this.setState({
+      await this.setState({
         name: recipe.recipe.name,
         prepTime: recipe.recipe.prepTime,
         cookTime: recipe.recipe.cookTime,
         instructions: recipe.recipe.instructions,
         ingredients: recipe.recipe.ingredients,
-        ingredientsList: recipe.recipe.ingredients,
         ingredientsAmount: recipe.recipe.ingredientsAmount,
         contributor: recipe.recipe.contributor,
         category: recipe.recipe.category,
@@ -95,7 +93,6 @@ class RecipeForm extends Component {
       const ingredients= await this.getAllIngredients();
       this.setState({ allIngredients: ingredients.ingredients });
   }
-
   instructions = {}
 
   async getAllIngredients() {
@@ -141,6 +138,7 @@ class RecipeForm extends Component {
         this.props.history.push(`/recipes/${this.props.match.params.id}`);
       } else {
         await recipeService.create(this.state);
+        this.props.history.push('/recipes')
       }
     } catch (err) {
       this.props.updateMessage(err.message);
@@ -152,18 +150,24 @@ class RecipeForm extends Component {
       return i.name;
     } else {
       let ingredient = await ingredientService.getIngredient(i);
-      return "Garlic";
+      return ingredient.ingredient.name;
     }
   }
 
   handleAddIngredient = async () => {
     let ingredients = [...this.state.ingredients];
     let amount = [...this.state.ingredientsAmount];
+    let ingredientsName = [...this.state.ingredientsName];
+    let iName = await this.getIngredientName(this.state.ingredientsInput);
     ingredients.push(this.state.ingredientsInput);
     amount.push(this.state.ingredientsAmountInput);
+    ingredientsName.push(iName);
     this.setState({
       ingredients: ingredients,
       ingredientsAmount: amount,
+      ingredientsInput: '',
+      ingredientsAmountInput: '',
+      ingredientsName: ingredientsName, 
     });
   }
 
@@ -234,7 +238,7 @@ class RecipeForm extends Component {
                 <Form.Group as={Col} controlId="formIngredients">
                   <Form.Label>Ingredients</Form.Label>
                       {this.state.ingredients && this.state.ingredients.map((ingredient, idx) =>
-                        <Form.Control value={this.getIngredientName(ingredient)} disabled /> 
+                        <Form.Control value={`${ this.state.ingredientsName[idx]} `} disabled />
                       )}
                       <Form.Control as="select" name="ingredientsInput" onChange={this.handleChange}>
                           <option value=''>None</option>
