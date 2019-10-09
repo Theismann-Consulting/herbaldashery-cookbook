@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Form, Container, Toast } from 'react-bootstrap';
+import { Button, Form, Container, Col } from 'react-bootstrap';
 import recipeService from '../../utils/recipeService';
 import ingredientService from '../../utils/ingredientService';
 import categoryService from '../../utils/categoryService';
 import mealPlanService from '../../utils/mealPlanService';
-import ReactQuill, { Quill, Mixin, Toolbar } from 'react-quill';
+import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import IngredientForm from '../IngredientForm/IngredientForm';
+import { thisExpression } from '@babel/types';
 
 
 class RecipeForm extends Component {
@@ -19,15 +21,20 @@ class RecipeForm extends Component {
     instructionsHtml: '',
     instructionsString: '',
     ingredients: [],
+    ingredientsAmount: [],
+    ingredientsList: [],
     contributor: '',
     category: [],
     description: '',
     mealPlan: [],
     greeting: 'Create a New Recipe',
-    allIngredients: [this.getAllIngredients()],
-    allCategories: [this.getAllCategories()],
-    allMealPlans: [this.getAllMealPlans()],
+    allIngredients: [],
+    allCategories: [],
+    allMealPlans: [],
     message: '',
+    ingredientForm: false,
+    ingredientsInput: '',
+    ingredientsAmountInput: '',
   };
 
   quill = {
@@ -42,36 +49,65 @@ class RecipeForm extends Component {
     placeholder: 'What steps are needed to make the recipe...',
   };
 
+  triggerIngredientForm = () => {
+    this.setState( {
+        ...this.state,
+        ingredientForm: true,
+    })
+  }
+
+  closeIngredientForm = () => {
+    this.setState( {
+        ...this.state,
+        ingredientForm: false,
+    })
+  }
+
   async componentDidMount(){
+    const ingredients = await this.getAllIngredients();
+    const categories = await this.getAllCategories();
+    const mealPlans = await this.getAllMealPlans();
+    this.setState({
+      allIngredients: ingredients.ingredients,
+      allCategories: categories.categories,
+      allMealPlans: mealPlans.mealPlans,
+    })
     if(this.props.match && this.props.match.params.id) {
       const recipe = await recipeService.getRecipe(this.props.match.params.id);
-      console.log(recipe);
       this.setState({
         name: recipe.recipe.name,
         prepTime: recipe.recipe.prepTime,
         cookTime: recipe.recipe.cookTime,
         instructions: recipe.recipe.instructions,
         ingredients: recipe.recipe.ingredients,
+        ingredientsList: recipe.recipe.ingredients,
+        ingredientsAmount: recipe.recipe.ingredientsAmount,
         contributor: recipe.recipe.contributor,
         category: recipe.recipe.category,
         description: recipe.recipe.description,
         mealPlan: recipe.recipe.mealPlan,
-        greeting: `Edit ${recipe.recipe.name} Recipe`,
-        
+        greeting: `Edit ${recipe.recipe.name} Recipe`,        
       })
     }
   }
 
+  updateIngredients = async () => {
+      const ingredients= await this.getAllIngredients();
+      this.setState({ allIngredients: ingredients.ingredients });
+  }
+
+  instructions = {}
+
   async getAllIngredients() {
-    await ingredientService.getIngredients();
+    return await ingredientService.getIngredients();
   };
 
   async getAllCategories() {
-    await categoryService.getCategories();
+    return await categoryService.getCategories();
   };
 
   async getAllMealPlans() {
-    await mealPlanService.getMealPlans();
+    return await mealPlanService.getMealPlans();
   };
 
   handleChange = (e) => {
@@ -79,8 +115,6 @@ class RecipeForm extends Component {
       [e.target.name]: e.target.value
     });
   }
-
-  instructions = {};
 
   quillHandleChange = (content, delta, source, editor) => {
     this.instructions.delta = editor.getContents(content);
@@ -107,11 +141,30 @@ class RecipeForm extends Component {
         this.props.history.push(`/recipes/${this.props.match.params.id}`);
       } else {
         await recipeService.create(this.state);
-        this.props.history.push(`/recipes`);
       }
     } catch (err) {
       this.props.updateMessage(err.message);
     }
+  }
+
+  getIngredientName = async (i) => {
+    if(i._id){
+      return i.name;
+    } else {
+      let ingredient = await ingredientService.getIngredient(i);
+      return "Garlic";
+    }
+  }
+
+  handleAddIngredient = async () => {
+    let ingredients = [...this.state.ingredients];
+    let amount = [...this.state.ingredientsAmount];
+    ingredients.push(this.state.ingredientsInput);
+    amount.push(this.state.ingredientsAmountInput);
+    this.setState({
+      ingredients: ingredients,
+      ingredientsAmount: amount,
+    });
   }
 
   isFormInvalid() {
@@ -125,7 +178,6 @@ class RecipeForm extends Component {
   render() {
     return (
       <Container>
-        <div>
         <h3>{this.state.greeting}</h3>
           <Form>
             <Form.Group controlId="formName">
@@ -169,15 +221,37 @@ class RecipeForm extends Component {
               </Form.Text>
             </Form.Group>
 
-            <Form.Group controlId="formIngredients">
-              <Form.Label>Ingredients</Form.Label>
-              <Form.Control as="select" name="ingredients" onChange={this.handleChange} value={this.state.ingredients} multiple>
-                <option value=''>None</option>
-                {this.state.allIngredients.map((ingredient, idx) =>
-                <option value={`${ingredient._id}`}>{ingredient.amount} {ingredient.name}</option>
-                )}
-              </Form.Control>
-              <Form.Text as={Link} to="/ingredients/new">Add New Ingredient </Form.Text>
+            <Form.Group>
+              <Form.Row>
+                <Form.Group as={Col} controlId="formIngredients">
+                  <Form.Label>Amount</Form.Label>
+                    {this.state.ingredientsAmount && this.state.ingredientsAmount.map((ingredientAmount, idx) =>
+                      <Form.Control value={`${ingredientAmount}`} disabled/>
+                    )}
+                    <Form.Control name='ingredientsAmountInput' onChange={this.handleChange} />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formIngredients">
+                  <Form.Label>Ingredients</Form.Label>
+                      {this.state.ingredients && this.state.ingredients.map((ingredient, idx) =>
+                        <Form.Control value={this.getIngredientName(ingredient)} disabled /> 
+                      )}
+                      <Form.Control as="select" name="ingredientsInput" onChange={this.handleChange}>
+                          <option value=''>None</option>
+                          {this.state.allIngredients.map((ingredient, idx) =>
+                            <option value={`${ingredient._id}`}>{ingredient.name}</option>
+                          )}
+                      </Form.Control>
+                  {!this.state.ingredientForm && 
+                  <Button className='btn-sm' variant='success' onClick={this.triggerIngredientForm}>Create New Ingredient</Button>}
+                  {this.state.ingredientForm && 
+                  <Button className='btn-sm' variant='success' onClick={this.closeIngredientForm}>Close Ingredient Form</Button>}
+                </Form.Group>
+              </Form.Row>
+                  <Button className='btn-sm' variant='success' onClick={this.handleAddIngredient}>Add Ingredient</Button>
+            </Form.Group>
+            <Form.Group>
+              {this.state.ingredientForm && <IngredientForm updateIngredients={this.updateIngredients} />}
             </Form.Group>
 
             <Form.Group controlId="formCategory">
@@ -205,7 +279,6 @@ class RecipeForm extends Component {
               Submit
             </Button>
           </Form>
-        </div>
       </Container>
     );
   }

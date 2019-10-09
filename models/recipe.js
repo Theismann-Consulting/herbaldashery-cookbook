@@ -7,6 +7,7 @@ const recipeSchema = new mongoose.Schema({
     instructions: Object,
     instructionsHtml: String,
     instructionsString: String,
+    ingredientsAmount: [String],
     ingredients: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Ingredient',

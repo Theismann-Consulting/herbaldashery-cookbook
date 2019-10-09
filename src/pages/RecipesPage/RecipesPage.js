@@ -14,9 +14,9 @@ class RecipesPage extends Component {
     this.setState({ recipes: recipes.recipes });
   };
 
-    async componentDidUpdate(prevProps, prevState){
+  async componentDidUpdate(prevProps, prevState){
     if (this.state.recipes.recipes !== prevState.recipes.recipes) {
-      const recipes= await recipeService.getUsers();
+      const recipes= await recipeService.getRecipes();
 
       this.setState({ recipes: recipes.recipes });
     }
