@@ -1,7 +1,7 @@
 const BASE_URL = '/api/mealPlans/';
 
 function create(mealPlan) {
-  return fetch(BASE_URL + 'create', {
+  return fetch(BASE_URL + '', {
     method: 'POST',
     headers: new Headers({'Content-Type': 'application/json'}),
     body: JSON.stringify(mealPlan)

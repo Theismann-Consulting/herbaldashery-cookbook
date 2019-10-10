@@ -9,12 +9,15 @@ class RecipeViewPage extends Component {
   state = {
     recipe: '',
     message: '',
+    loading: true,
+
   }
 
   async componentDidMount() {
     const recipe = await recipeService.getRecipe(this.props.match.params.id);
     this.setState({
       recipe: recipe.recipe,
+      loading: false,
     });
   };
 
@@ -40,12 +43,16 @@ class RecipeViewPage extends Component {
   };
 
   render() {
+    if(this.state.loading){
+      return <div>Loading...</div>
+    }
     return (
       <div className="body">
       <h3>{this.state.message}</h3>
         <Card>
           {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
-          <Card.Header className="text-right">{this.state.recipe.category}</Card.Header>
+          <Card.Header className="text-right">{this.state.recipe.category.map((c) =>
+          c.name)}</Card.Header>
           <Card.Body>
             <Card.Title>{this.state.recipe.name}</Card.Title>
           </Card.Body>

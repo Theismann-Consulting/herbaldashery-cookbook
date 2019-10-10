@@ -1,7 +1,7 @@
 const BASE_URL = '/api/categories/';
 
 function create(category) {
-  return fetch(BASE_URL + 'create', {
+  return fetch(BASE_URL + '', {
     method: 'POST',
     headers: new Headers({'Content-Type': 'application/json'}),
     body: JSON.stringify(category)

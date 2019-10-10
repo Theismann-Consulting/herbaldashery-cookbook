@@ -6,18 +6,22 @@ const mealPlanSchema = new mongoose.Schema({
     recipes: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Recipe',
+      autopopulate: true,
     }],
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
+      autopopulate: true,
     },
     assignedUsers: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
+      autopopulate: true,
     }],
     description: String,
 }, {
     timestamps: true,
 });
 
-module.exports = mongoose.model('Meal Plan', mealPlanSchema);
+mealPlanSchema.plugin(require('mongoose-autopopulate'));
+module.exports = mongoose.model('MealPlan', mealPlanSchema);

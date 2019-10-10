@@ -13,7 +13,7 @@ const mealPlansCtrl = require('../../controllers/mealPlans');
 router.get('/', mealPlansCtrl.index);
 router.get('/:id', mealPlansCtrl.show);
 // router.get('/:id/users', mealPlansCtrl.showUsers);
-// router.post('/', mealPlansCtrl.create);
+router.post('/', mealPlansCtrl.create);
 // router.post('/:id/recipes', mealPlansCtrl.addRecipe);
 // router.post('/:id/users', mealPlansCtrl.addUser);
 // router.put('/:id', mealPlansCtrl.update);

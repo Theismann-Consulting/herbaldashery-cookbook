@@ -56,7 +56,7 @@ async function create(req, res) {
     await mealPlan.save();
     res.json({ mealPlan });
   } catch (err) {
-    // Probably a duplicate email
+    console.log(err)
     res.status(400).json(err);
   }
 }

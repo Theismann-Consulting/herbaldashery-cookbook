@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import _ from 'underscore';
 import { Link } from 'react-router-dom';
-import { Button, Form, Container, Col } from 'react-bootstrap';
+import { Button, Form, Container, Col, InputGroup } from 'react-bootstrap';
 import recipeService from '../utils/recipeService';
 import ingredientService from '../utils/ingredientService';
 import categoryService from '../utils/categoryService';
@@ -8,6 +9,8 @@ import mealPlanService from '../utils/mealPlanService';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import IngredientForm from './IngredientForm';
+import MealPlanForm from './MealPlanForm';
+import CategoryForm from './CategoryForm';
 
 
 class RecipeForm extends Component {
@@ -24,8 +27,14 @@ class RecipeForm extends Component {
     ingredientsName: [],
     contributor: '',
     category: [],
+    categoryNames: [],
+    categoryInput: '',
+    categoryRemove: '',
     description: '',
     mealPlan: [],
+    mealPlanNames: [],
+    mealPlanRemove: '',
+    mealPlanInput: '',
     greeting: 'Create a New Recipe',
     allIngredients: [],
     allCategories: [],
@@ -34,8 +43,10 @@ class RecipeForm extends Component {
     ingredientForm: false,
     ingredientsInput: {},
     ingredientsAmountInput: '',
+    mealPlanForm: false,
+    categoryForm: false,
   };
-
+  
   quill = {
     modules: {
       toolbar: [
@@ -44,24 +55,14 @@ class RecipeForm extends Component {
         [{ list: 'ordered' }, { list: 'bullet' }]
       ]
     },
-
+    
     placeholder: 'What steps are needed to make the recipe...',
   };
-
-  triggerIngredientForm = () => {
-    this.setState( {
-        ...this.state,
-        ingredientForm: true,
-    })
-  }
-
-  closeIngredientForm = () => {
-    this.setState( {
-        ...this.state,
-        ingredientForm: false,
-    })
-  }
-
+  
+  instructions = {}
+  
+  /*--------------------- Component Update Functions ------------------------*/
+  
   async componentDidMount(){
     const ingredients = await this.getAllIngredients();
     const categories = await this.getAllCategories();
@@ -80,6 +81,7 @@ class RecipeForm extends Component {
         instructions: recipe.recipe.instructions,
         ingredients: recipe.recipe.ingredients,
         ingredientsAmount: recipe.recipe.ingredientsAmount,
+        ingredientsName: recipe.recipe.ingredientsName,
         contributor: recipe.recipe.contributor,
         category: recipe.recipe.category,
         description: recipe.recipe.description,
@@ -93,19 +95,22 @@ class RecipeForm extends Component {
       const ingredients= await this.getAllIngredients();
       this.setState({ allIngredients: ingredients.ingredients });
   }
-  instructions = {}
 
-  async getAllIngredients() {
-    return await ingredientService.getIngredients();
-  };
+  updateCategories = async () => {
+      const category= await this.getAllCategories();
+      this.setState({ allCategories: category.category });
+  }
 
-  async getAllCategories() {
-    return await categoryService.getCategories();
-  };
+  updateMealPlans = async () => {
+      const mealPlans= await this.getAllMealPlans();
+      this.setState({ allMealPlans: mealPlans.mealPlans });
+  }
 
-  async getAllMealPlans() {
-    return await mealPlanService.getMealPlans();
-  };
+  updateMessage = (msg) => {
+    this.setState({message: msg});
+  }
+
+  /*--------------------- Component Form Functions --------------------------*/
 
   handleChange = (e) => {
     this.setState({
@@ -117,6 +122,88 @@ class RecipeForm extends Component {
     this.instructions.delta = editor.getContents(content);
     this.instructions.html = content;
     this.instructions.string = editor.getText(content);
+  }
+  
+  handleAddCategory = async () => {
+    let category = [...this.state.category];
+    let categoryNames = [...this.state.categoryNames];
+    let cName = await this.getCategoryName(this.state.categoryInput);
+    category.push(this.state.categoryInput);
+    categoryNames.push(cName);
+    this.setState({
+      category: category,
+      categoryNames: categoryNames,
+      categoryInput: '',
+    });
+  }
+
+  handleRemoveCategory = (e) => {
+    let selection = this.state.categoryRemove;
+    let category = [...this.state.category];
+    let categoryNames = [...this.state.categoryNames];
+    let cat;
+    if(selection._id){
+      category.filter(function(val, idx, arr){
+        if(val._id == selection._id){
+          cat = idx;
+        }
+      });
+      category.splice(cat, 1);
+    } else {
+      category.filter(function(val, idx, arr){
+        if(val == selection){
+          categoryNames.splice(idx, 1)
+        }
+        cat = idx;
+      },
+      );
+      category.splice(cat, 1);
+    }
+    this.setState({
+      category: category,
+      categoryNames: categoryNames,
+    })
+  }
+
+  handleAddMealPlan = async () => {
+    let mealPlan = [...this.state.mealPlan];
+    let mealPlanNames = [...this.state.mealPlanNames];
+    let mName = await this.getMealPlanName(this.state.mealPlanInput);
+    mealPlan.push(this.state.mealPlanInput);
+    mealPlanNames.push(mName);
+    this.setState({
+      mealPlan: mealPlan,
+      mealPlanNames: mealPlanNames,
+      mealPlanInput: '',
+    });
+  }
+
+  handleRemoveMealPlan = (e) => {
+    let selection = this.state.mealPlanRemove;
+    let mealPlan = [...this.state.mealPlan];
+    let mealPlanNames = [...this.state.mealPlanNames];
+    let mp;
+    if(selection._id){
+      mealPlan.filter(function(val, idx, arr){
+        if(val._id == selection._id){
+          mp = idx;
+        }
+      });
+      mealPlan.splice(mp, 1);
+    } else {
+      mealPlan.filter(function(val, idx, arr){
+        if(val == selection){
+          mealPlanNames.splice(idx, 1)
+        }
+        mp = idx;
+      },
+      );
+      mealPlan.splice(mp, 1);
+    }
+    this.setState({
+      mealPlan: mealPlan,
+      mealPlanNames: mealPlanNames,
+    })
   }
 
   quillSave = () => {
@@ -145,15 +232,6 @@ class RecipeForm extends Component {
     }
   }
 
-  getIngredientName = async (i) => {
-    if(i._id){
-      return i.name;
-    } else {
-      let ingredient = await ingredientService.getIngredient(i);
-      return ingredient.ingredient.name;
-    }
-  }
-
   handleAddIngredient = async () => {
     let ingredients = [...this.state.ingredients];
     let amount = [...this.state.ingredientsAmount];
@@ -172,12 +250,101 @@ class RecipeForm extends Component {
   }
 
   isFormInvalid() {
-    return !(this.state.name && this.state.email && this.state.password === this.state.passwordConf);
+    return !(this.state.name && this.state.dscription && this.state.instructions && this.state.prepTime && this.state.cookTime);
   }
 
-  updateMessage = (msg) => {
-    this.setState({message: msg});
+  /*--------------------- Form Helper Functions -----------------------------*/
+
+  triggerIngredientForm = () => {
+    this.setState( {
+        ...this.state,
+        ingredientForm: true,
+    })
   }
+
+  closeIngredientForm = () => {
+    this.setState( {
+        ...this.state,
+        ingredientForm: false,
+    })
+  }
+
+  triggerMealPlanForm = () => {
+    this.setState( {
+        ...this.state,
+        mealPlanForm: true,
+    })
+  }
+
+  closeMealPlanForm = () => {
+    this.setState( {
+        ...this.state,
+        mealPlanForm: false,
+    })
+  }
+
+  triggerCategoryForm = () => {
+    this.setState( {
+        ...this.state,
+        categoryForm: true,
+    })
+  }
+
+  closeCategoryForm = () => {
+    this.setState( {
+        ...this.state,
+        categoryForm: false,
+    })
+  }
+  
+
+
+  /*--------------------- API Functions -------------------------------------*/
+
+  async getAllIngredients() {
+    return await ingredientService.getIngredients();
+  };
+
+  async getAllCategories() {
+    return await categoryService.getCategories();
+  };
+
+  async getAllMealPlans() {
+    return await mealPlanService.getMealPlans();
+  };
+
+
+  getIngredientName = async (i) => {
+    if(i._id){
+      return i.name;
+    } else {
+      let ingredient = await ingredientService.getIngredient(i);
+      return ingredient.ingredient.name;
+    }
+  }
+
+  getMealPlanName = async (mp) => {
+    console.log(mp);
+    if(mp._id){
+      return mp.name;
+    } else {
+      let mealPlan = await mealPlanService.getMealPlan(mp);
+      return mealPlan.mealPlan.name;
+    }
+  }
+
+
+  getCategoryName = async (c) => {
+    console.log(c);
+    if(c._id){
+      return c.name;
+    } else {
+      let category = await categoryService.getCategory(c);
+      return category.category.name;
+    }
+  }
+
+/*-------------------------------------- Render -----------------------------------*/
 
   render() {
     return (
@@ -237,48 +404,92 @@ class RecipeForm extends Component {
 
                 <Form.Group as={Col} controlId="formIngredients">
                   <Form.Label>Ingredients</Form.Label>
+                  {!this.state.ingredientForm && 
+                  <Button className='btn-sm float-right' variant='info' onClick={this.triggerIngredientForm}>Create New Ingredient</Button>}
+                  {this.state.ingredientForm && 
+                  <Button className='btn-sm float-right' variant='info' onClick={this.closeIngredientForm}>Close Ingredient Form</Button>}
                       {this.state.ingredients && this.state.ingredients.map((ingredient, idx) =>
-                        <Form.Control value={`${ this.state.ingredientsName[idx]} `} disabled />
+                        <Form.Control value={`${this.state.ingredientsName[idx]}`} disabled />
                       )}
                       <Form.Control as="select" name="ingredientsInput" onChange={this.handleChange}>
-                          <option value=''>None</option>
+                          <option disabled>None</option>
                           {this.state.allIngredients.map((ingredient, idx) =>
                             <option value={`${ingredient._id}`}>{ingredient.name}</option>
                           )}
                       </Form.Control>
-                  {!this.state.ingredientForm && 
-                  <Button className='btn-sm' variant='success' onClick={this.triggerIngredientForm}>Create New Ingredient</Button>}
-                  {this.state.ingredientForm && 
-                  <Button className='btn-sm' variant='success' onClick={this.closeIngredientForm}>Close Ingredient Form</Button>}
                 </Form.Group>
               </Form.Row>
-                  <Button className='btn-sm' variant='success' onClick={this.handleAddIngredient}>Add Ingredient</Button>
+                  <Button className='btn-sm' variant='info' onClick={this.handleAddIngredient}>Add Ingredient</Button>
             </Form.Group>
             <Form.Group>
               {this.state.ingredientForm && <IngredientForm updateIngredients={this.updateIngredients} />}
             </Form.Group>
 
-            <Form.Group controlId="formCategory">
-              <Form.Label>Select Category</Form.Label>
-              <Form.Control as="select" name="category" onChange={this.handleChange} value={this.state.category} multiple >
-                <option value='Unassigned'>None</option>
-                {this.state.category.map((category, idx) =>
-                <option value={`${category._id}`}>{category.name}</option>
-                )}
-              </Form.Control>
-              <Form.Text as={Link} to="/categories/new">Add New Category </Form.Text>
-            </Form.Group>
+            <Form.Row>
+              <Form.Group as={Col} controlId="formCategory">
+                <Form.Label>Select Category</Form.Label>
+                {!this.state.categoryForm && 
+                    <Button className='btn-sm float-right' variant='info' onClick={this.triggerCategoryForm}>Create New Category</Button>}
+                    {this.state.categoryForm && 
+                    <Button className='btn-sm float-right' variant='info' onClick={this.closeCategoryForm}>Close Category Form</Button>}
+                <Form.Control as="select" name="categoryInput" onChange={this.handleChange} multiple>
+                  <option selected disabled>None</option>
+                  {this.state.allCategories.map((category, idx) =>
+                    <option value={`${category._id}`}>{category.name}</option>
+                  )}
+                </Form.Control>
+                  <Button className='btn-sm' variant='info' onClick={this.handleAddCategory}>Add Category</Button>
+              </Form.Group>
+              <Form.Group as={Col} controlId="formCategory">
+                <Form.Label>Remove Category</Form.Label>
+                <Form.Control as="select" name="categoryRemove" onChange={this.handleChange} multiple>
+                  {this.state.category.map((category, idx) => {
+                    if(category._id){
+                      return <option value={`${category._id}`} >{category.name}</option>
+                    } else {
+                      return <option value={`${category}`} >{this.state.categoryNames[idx]}</option>
+                    }
+                  })}
+                </Form.Control>
+                  <Button className='btn-sm' variant='info' onClick={this.handleRemoveCategory}>Remove Category</Button>
+              </Form.Group>
+            </Form.Row>
+              <Form.Group>
+                {this.state.categoryForm && <CategoryForm updateCategories={this.updateCategories} />}
+              </Form.Group>
 
-            <Form.Group controlId="formMealPlans">
-              <Form.Label>Select Meal Plans</Form.Label>
-                <Form.Control as="select" name="mealPlans" onChange={this.handleChange} value={this.state.mealPlan} multiple >
-                <option value=''>None</option>
-                {this.state.mealPlan.map((mealPlan, idx) =>
-                <option value={`${mealPlan._id}`}>{mealPlan.name}</option>
-                )}
-              </Form.Control>
-              <Form.Text as={Link} to="/ingredients/new">Add New MealPlan </Form.Text>
-            </Form.Group>
+            <Form.Row>
+              <Form.Group as={Col} controlId="formMealPlan">
+                <Form.Label>Select Meal Plan</Form.Label>
+                {!this.state.mealPlanForm && 
+                    <Button className='btn-sm float-right' variant='info' onClick={this.triggerMealPlanForm}>Create New MealPlan</Button>}
+                    {this.state.mealPlanForm && 
+                    <Button className='btn-sm float-right' variant='info' onClick={this.closeMealPlanForm}>Close MealPlan Form</Button>}
+                <Form.Control as="select" name="mealPlanInput" onChange={this.handleChange} multiple>
+                  <option selected disabled>None</option>
+                  {this.state.allMealPlans.map((mealPlan, idx) =>
+                    <option value={`${mealPlan._id}`}>{mealPlan.name}</option>
+                  )}
+                </Form.Control>
+                  <Button className='btn-sm' variant='info' onClick={this.handleAddMealPlan}>Add MealPlan</Button>
+              </Form.Group>
+              <Form.Group as={Col} controlId="formMealPlan">
+                <Form.Label>Remove MealPlan</Form.Label>
+                <Form.Control as="select" name="mealPlanRemove" onChange={this.handleChange} multiple>
+                  {this.state.mealPlan.map((mealPlan, idx) => {
+                    if(mealPlan._id){
+                      return <option value={`${mealPlan._id}`} >{mealPlan.name}</option>
+                    } else {
+                      return <option value={`${mealPlan}`} >{this.state.mealPlanNames[idx]}</option>
+                    }
+                  })}
+                </Form.Control>
+                  <Button className='btn-sm' variant='info' onClick={this.handleRemoveMealPlan}>Remove MealPlan</Button>
+              </Form.Group>
+            </Form.Row>
+              <Form.Group>
+                {this.state.mealPlanForm && <MealPlanForm updateMealPlans={this.updateMealPlans} />}
+              </Form.Group>
             <Button variant="primary" type="submit" onClick={this.handleSubmit}>
               Submit
             </Button>

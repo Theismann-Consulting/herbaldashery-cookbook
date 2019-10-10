@@ -1,5 +1,7 @@
 const Recipe = require('../models/recipe');
 const Ingredient = require('../models/ingredient');
+const Category = require('../models/category');
+const MealPlan = require('../models/mealPlan');
 
 module.exports = {
   create,
@@ -22,13 +24,9 @@ async function index(req, res, next) {
 
 async function show(req, res) {
   try {
-    await Recipe.findById(req.params.id)
-      .populate('ingredients')
-      .populate('categories')
-      .populate('mealPlans')
-      .exec((function(err, recipe) {
+    await Recipe.findById(req.params.id, function(err, recipe){
         res.json({ recipe });
-    }));
+    });
   } catch(err) {
     res.status(400).json(err);
   }

@@ -20,10 +20,12 @@ const userSchema = new mongoose.Schema({
   mealPlansOwned: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Meal Plans',
+      autopopulate: true,
     }],
   mealPlansAssigned: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Meal Plans',
+      autopopulate: true,
     }],
   }, {
   timestamps: true
@@ -53,4 +55,5 @@ userSchema.methods.comparePassword = function(tryPassword, cb) {
   bcrypt.compare(tryPassword, this.password, cb);
 };
 
+userSchema.plugin(require('mongoose-autopopulate'));
 module.exports = mongoose.model('User', userSchema);

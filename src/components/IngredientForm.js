@@ -68,8 +68,8 @@ class IngredientForm extends Component {
               <Form.Label>Ingredient Name</Form.Label>
               <Form.Control name="name" placeholder="Full Name" onChange={this.handleChange} value={this.state.name || ''} />
             </Form.Group>
-            <Button className='btn-sm' variant="primary" type="submit" onClick={this.handleSubmit}>
-              Submit
+            <Button className='btn-sm float-right' variant="success" type="submit" onClick={this.handleSubmit}>
+              Create
             </Button>
             &nbsp;&nbsp;&nbsp;&nbsp;{this.state.message}
           </Form>

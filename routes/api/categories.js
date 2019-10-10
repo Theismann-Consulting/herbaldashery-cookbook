@@ -15,7 +15,7 @@ router.get('/', categoriesCtrl.index);
 router.get('/:id', categoriesCtrl.show);
 // router.get('/:id/edit', categoriesCtrl.edit);
 // router.get('/:id/users', categoriesCtrl.showUsers);
-// router.post('/', categoriesCtrl.create);
+router.post('/', categoriesCtrl.create);
 // router.post('/:id/recipes', categoriesCtrl.addRecipe);
 // router.post('/:id/users', categoriesCtrl.addUser);
 // router.put('/:id', categoriesCtrl.update);
