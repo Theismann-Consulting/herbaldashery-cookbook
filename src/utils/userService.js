@@ -19,6 +19,21 @@ function signup(user) {
   //.then((token) => token.token);
 }
 
+function update(user, userId) {
+  return fetch(BASE_URL + `${userId}`, {
+    method: 'PUT',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
+    body: JSON.stringify(user)
+  })
+  .then(res => {
+    if (res.ok) return res.json();
+    throw new Error('Unable to Update!');
+  })
+}
+
 function getCurrUser() {
   return tokenService.getUserFromToken();
 }
@@ -44,7 +59,10 @@ function login(creds) {
 function getUsers(){
   return fetch(BASE_URL + '', {
     method: 'get',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
   })
   .then(res => {
     // Valid login if we have a status of 2xx (res.ok)
@@ -56,7 +74,25 @@ function getUsers(){
 function getUser(userId){
   return fetch(BASE_URL + `${userId}`, {
     method: 'get',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
+  })
+  .then(res => {
+    // Valid login if we have a status of 2xx (res.ok)
+    if (res.ok) return res.json();
+    throw new Error('Not Authorized');
+  });
+}
+
+function deleteUser(userId){
+  return fetch(BASE_URL + `${userId}`, {
+    method: 'delete',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
   })
   .then(res => {
     // Valid login if we have a status of 2xx (res.ok)
@@ -71,5 +107,7 @@ export default {
   getUsers,
   getUser,
   logout,
-  login
+  login,
+  update,
+  delete: deleteUser,
 };

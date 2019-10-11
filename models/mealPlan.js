@@ -20,4 +20,4 @@ const mealPlanSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-module.exports = mongoose.model('Meal Plan', mealPlanSchema);
+module.exports = mongoose.model('MealPlan', mealPlanSchema);

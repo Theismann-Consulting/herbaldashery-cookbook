@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import SignupForm from '../../components/SignupForm/SignupForm';
-import './SignupPage.css';
+import RecipeForm from '../../components/RecipeForm';
 
-class SignupPage extends Component {
+class RecipeEditPage extends Component {
   constructor(props) {
     super(props);
     this.state = {message: ''}
@@ -14,12 +13,12 @@ class SignupPage extends Component {
 
   render() {
     return (
-      <div className='SignupPage'>
-        <SignupForm {...this.props} updateMessage={this.updateMessage} />
+      <div className='UserEditPage'>
+        <RecipeForm {...this.props} updateMessage={this.updateMessage} />
         <p>{this.state.message}</p>
       </div>
     );
   }
 }
 
-export default SignupPage;
+export default RecipeEditPage;

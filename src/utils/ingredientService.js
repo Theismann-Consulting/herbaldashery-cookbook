@@ -1,32 +1,31 @@
 import tokenService from './tokenService';
 
-const BASE_URL = '/api/recipes/';
+const BASE_URL = '/api/ingredients/';
 
-function create(recipe) {
+function create(ingredient) {
   return fetch(BASE_URL + '', {
     method: 'POST',
     headers: new Headers({
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + tokenService.getToken()
-    }),
-    body: JSON.stringify(recipe)
+      }),
+    body: JSON.stringify(ingredient)
   })
   .then(res => {
-    console.log(res);
     if (res.ok) return res.json();
     // Probably a duplicate email
-    throw new Error('Unable to Create Recipe!');
+    throw new Error('Unable to Create Ingredient!');
   })
 }
 
-function update(recipe, recipeId) {
-  return fetch(BASE_URL + `${recipeId}`, {
+function update(ingredient, ingredientId) {
+  return fetch(BASE_URL + `${ingredientId}`, {
     method: 'PUT',
     headers: new Headers({
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + tokenService.getToken()
     }),
-    body: JSON.stringify(recipe)
+    body: JSON.stringify(ingredient)
   })
   .then(res => {
     if (res.ok) return res.json();
@@ -34,7 +33,7 @@ function update(recipe, recipeId) {
   })
 }
 
-function getRecipes(){
+function getIngredients(){
   return fetch(BASE_URL + '', {
     method: 'get',
     headers: new Headers({
@@ -49,8 +48,8 @@ function getRecipes(){
   });
 }
 
-function getRecipe(recipeId){
-  return fetch(BASE_URL + `${recipeId}`, {
+function getIngredient(ingredientId){
+  return fetch(BASE_URL + `${ingredientId}`, {
     method: 'get',
     headers: new Headers({
       'Content-Type': 'application/json',
@@ -64,8 +63,8 @@ function getRecipe(recipeId){
   });
 }
 
-function deleteRecipe(recipeId){
-  return fetch(BASE_URL + `${recipeId}`, {
+function deleteIngredient(ingredientId){
+  return fetch(BASE_URL + `${ingredientId}`, {
     method: 'delete',
     headers: new Headers({
       'Content-Type': 'application/json',
@@ -81,8 +80,8 @@ function deleteRecipe(recipeId){
 
 export default {
   create, 
-  getRecipes,
-  getRecipe,
+  getIngredients,
+  getIngredient,
   update,
-  delete: deleteRecipe,
+  delete: deleteIngredient,
 };

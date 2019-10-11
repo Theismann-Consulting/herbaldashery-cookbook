@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const mealPlansCtrl = require('../../controllers/mealPlans');
+const categoriesCtrl = require('../../controllers/categories');
 
 /*---------- Public Routes ----------*/
 
@@ -10,11 +10,11 @@ const mealPlansCtrl = require('../../controllers/mealPlans');
 
 router.use(require('../../config/auth'));
 
-router.get('/', isLoggedIn, mealPlansCtrl.index);
-router.get('/:id', isLoggedIn, mealPlansCtrl.show);
-router.post('/', isContributor, isAdmin, mealPlansCtrl.create);
-router.put('/:id', isContributor, isAdmin, mealPlansCtrl.update);
-router.delete('/:id', isAdmin, mealPlansCtrl.delete);
+router.get('/', isLoggedIn, categoriesCtrl.index);
+router.get('/:id', isLoggedIn, categoriesCtrl.show);
+router.post('/', isContributor, isAdmin, categoriesCtrl.create);
+router.put('/:id', isContributor, isAdmin, categoriesCtrl.update);
+router.delete('/:id', isAdmin, categoriesCtrl.delete);
 
 
 

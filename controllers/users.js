@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const MealPlan = require('../models/mealPlan');
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.SECRET;
 
@@ -6,17 +7,16 @@ module.exports = {
   signup,
   login,
   index,
-  // edit,
-  // update,
+  update,
   show,
-  // delete :deleteUser
+  delete :deleteUser
 };
 
 
 async function index(req, res, next) {
   try {
     await User.find({}, function (err, users){
-        res.json({ users });
+      res.json({ users });
     });
   } catch (err) {
     res.status(400).json(err);
@@ -25,58 +25,45 @@ async function index(req, res, next) {
 
 async function show(req, res) {
   try {
-    await User.findById(req.params.id, function(err, user) {
+    await User.findById(req.params.id)
+      .populate('MealPlan')
+      .exec(function(err, user) {
         res.json({ user });
-        console.log('Controller:', user);
     });
   } catch(err) {
     res.status(400).json(err);
   }
 };
 
-// function newUser(req, res) {
-//   res.render('users/add', {
-//       contributor: req.user,
-//     });
-// }
+async function update(req, res) {
+  await User.findById(req.params.id, function(err, user){
+    user.name = req.body.name;
+    user.email = req.body.email;
+    if(req.body.user > 0){user.password = req.body.password;}
+    user.role = req.body.role;
+    try {
+      user.save();
+      res.json({ user });
+    } catch(err) {
+      res.status(400).json(err);
+    }
+  });
+};
 
-// function create(req, res, next){
-//   const user = new User(req.body);
-//   user.save(function(err) {
-//       if (err) {return res.render('users/new', {
-//           contributor: req.user
-//       })};
-//       if (req.isAuthenticated()){
-//         res.redirect('/users');
-//       } else {
-//         res.redirect('/');
-//       }
-//   });
-// };
-
-// function edit(req, res){
-//   User.findById({ _id: req.params.id }, function(err, user){
-//     res.render('users/edit', {
-//       user,
-//       contributor: req.user,
-//     });
-//   });
-// }
-
-// function update(req, res) {
-//   console.log(req.body);
-//   User.findByIdAndUpdate({ _id: req.params.id }, req.body, function(err, user){
-//       res.redirect(`/users/${user._id}`);
-//   });
-// };
-
-// function deleteUser(req, res, next) {
-//   User.findByIdAndDelete(req.params.id, function(err) {
-//       res.redirect('/users');
-//   });
-// };
+async function deleteUser(req, res, next) {
+  try {
+    await User.findByIdAndDelete(req.params.id, function(err, user) {
+      MealPlan.findOneAndUpdate({assignedUsers: user._id}, {$pull: {assignedUsers: user._id}}, function(err, mealPlan){
+        res.json({ user, mealPlan });
+      });
+  });
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
 
 async function signup(req, res) {
+  console.log(req.body);
   const user = new User(req.body);
   try {
     await user.save();

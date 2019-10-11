@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const recipesCtrl = require('../controllers/recipes');
-const ingredientsCtrl = require('../controllers/ingredients');
+const recipesCtrl = require('../../controllers/recipes');
+const ingredientsCtrl = require('../../controllers/ingredients');
 
 /*---------- Public Routes ----------*/
 
@@ -9,21 +9,19 @@ const ingredientsCtrl = require('../controllers/ingredients');
 
 /*---------- Protected Routes ----------*/
 
-// router.use(require('../../config/auth'));
+router.use(require('../../config/auth'));
 
-// router.get('/', recipesCtrl.index);
-// router.get('/new', recipesCtrl.new);
-// router.get('/:id', recipesCtrl.show);
-// router.get('/:id/edit', recipesCtrl.edit);
-// router.post('/', recipesCtrl.create);
-// router.put('/:id', recipesCtrl.update);
-// router.delete('/:id', recipesCtrl.delete, ingredientsCtrl.clean);
+router.get('/', isLoggedIn, recipesCtrl.index);
+router.get('/:id', isLoggedIn, recipesCtrl.show);
+router.post('/', isContributor, isAdmin, recipesCtrl.create);
+router.put('/:id', isContributor, isAdmin, recipesCtrl.update);
+router.delete('/:id', isLoggedIn, recipesCtrl.delete);
 
 
 /*----- Helper Functions -----*/
 
 function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) return next();
+    if (req.user) return next();
     return res.status(401).json({msg: 'Not Authorized: Please Log In'});
 }
 

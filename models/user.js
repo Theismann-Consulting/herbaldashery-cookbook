@@ -19,11 +19,11 @@ const userSchema = new mongoose.Schema({
   },
   mealPlansOwned: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Meal Plans',
+      ref: 'MealPlan',
     }],
   mealPlansAssigned: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Meal Plans',
+      ref: 'MealPlan',
     }],
   }, {
   timestamps: true
