@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import _ from 'underscore';
-import { Link } from 'react-router-dom';
-import { Button, Form, Container, Col, InputGroup } from 'react-bootstrap';
+import { Button, Form, Container, Col } from 'react-bootstrap';
 import recipeService from '../utils/recipeService';
 import ingredientService from '../utils/ingredientService';
 import categoryService from '../utils/categoryService';

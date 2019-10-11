@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, ListGroup, ListGroupItem, } from 'react-bootstrap';
-import mealPlanService from '../../utils/mealPlanService';
+import { Card } from 'react-bootstrap';
+import categoryService from '../../utils/categoryService';
 import ingredientService from '../../utils/ingredientService';
 import RecipesList from '../../components/RecipesList';
 
-class MealPlanViewPage extends Component {
+class CategoryViewPage extends Component {
   state = {
-    mealPlan: '',
+    category: '',
     recipes: '',
     message: '',
     loading: true,
@@ -15,10 +15,10 @@ class MealPlanViewPage extends Component {
   }
 
   async componentDidMount() {
-    const mealPlan = await mealPlanService.getMealPlan(this.props.match.params.id);
+    const category = await categoryService.getCategory(this.props.match.params.id);
     this.setState({
-      mealPlan: mealPlan.mealPlan,
-      recipes: mealPlan.mealPlan.recipes,
+      category: category.category,
+      recipes: category.category.recipes,
       loading: false,
     });
   };
@@ -30,8 +30,8 @@ class MealPlanViewPage extends Component {
   handleDelete = async (e) => {
     try {
       if(this.props.match && this.props.match.params.id) {
-        await mealPlanService.delete(this.props.match.params.id);
-        this.props.history.push('/mealPlans');
+        await categoryService.delete(this.props.match.params.id);
+        this.props.history.push('/categories');
       };
     } catch (err) {
       this.updateMessage(err.message);
@@ -54,18 +54,15 @@ class MealPlanViewPage extends Component {
         <Card>
           {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
           <Card.Body>
-            <Card.Title>{this.state.mealPlan.name}</Card.Title>
+            <Card.Title>{this.state.category.name}</Card.Title>
           </Card.Body>
-          <ListGroup className="list-group-flush">
-            <ListGroupItem>{this.state.mealPlan.description}</ListGroupItem>
-            <ListGroupItem>
-              <RecipesList state={this.state}/>
-            </ListGroupItem>
-          </ListGroup>
+          <Card.Body>
+          <RecipesList state={this.state}/>
+          </Card.Body>
           {this.props.user.role === 'Admin' &&
           <Card.Body>
-            <Card.Link as={ Link } to={`/mealPlans/${this.state.mealPlan._id}/edit`}>Edit MealPlan</Card.Link>
-            <Card.Link as={ Link } to='/mealPlans' onClick={this.handleDelete}>Delete MealPlan</Card.Link>
+            <Card.Link as={ Link } to={`/categories/${this.state.category._id}/edit`}>Edit Category</Card.Link>
+            <Card.Link as={ Link } to='/categories' onClick={this.handleDelete}>Delete Category</Card.Link>
           </Card.Body>}
         </Card>
       </div>
@@ -73,4 +70,4 @@ class MealPlanViewPage extends Component {
   };
 };
 
-export default MealPlanViewPage;
+export default CategoryViewPage;

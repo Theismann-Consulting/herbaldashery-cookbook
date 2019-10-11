@@ -9,19 +9,19 @@ const ingredientsCtrl = require('../../controllers/ingredients');
 
 /*---------- Protected Routes ----------*/
 
-// router.use(require('../../config/auth'));
+router.use(require('../../config/auth'));
 
-router.get('/', recipesCtrl.index);
-router.get('/:id', recipesCtrl.show);
-router.post('/', recipesCtrl.create);
-router.put('/:id', recipesCtrl.update);
-router.delete('/:id', recipesCtrl.delete);
+router.get('/', isLoggedIn, recipesCtrl.index);
+router.get('/:id', isLoggedIn, recipesCtrl.show);
+router.post('/', isContributor, isAdmin, recipesCtrl.create);
+router.put('/:id', isContributor, isAdmin, recipesCtrl.update);
+router.delete('/:id', isLoggedIn, recipesCtrl.delete);
 
 
 /*----- Helper Functions -----*/
 
 function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) return next();
+    if (req.user) return next();
     return res.status(401).json({msg: 'Not Authorized: Please Log In'});
 }
 

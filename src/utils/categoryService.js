@@ -1,9 +1,14 @@
+import tokenService from './tokenService';
+
 const BASE_URL = '/api/categories/';
 
 function create(category) {
   return fetch(BASE_URL + '', {
     method: 'POST',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
     body: JSON.stringify(category)
   })
   .then(res => {
@@ -16,7 +21,10 @@ function create(category) {
 function update(category, categoryId) {
   return fetch(BASE_URL + `${categoryId}`, {
     method: 'PUT',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
     body: JSON.stringify(category)
   })
   .then(res => {
@@ -28,7 +36,10 @@ function update(category, categoryId) {
 function getCategories(){
   return fetch(BASE_URL + '', {
     method: 'get',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
   })
   .then(res => {
     // Valid login if we have a status of 2xx (res.ok)
@@ -40,7 +51,10 @@ function getCategories(){
 function getCategory(categoryId){
   return fetch(BASE_URL + `${categoryId}`, {
     method: 'get',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
   })
   .then(res => {
     // Valid login if we have a status of 2xx (res.ok)
@@ -52,7 +66,10 @@ function getCategory(categoryId){
 function deleteCategory(categoryId){
   return fetch(BASE_URL + `${categoryId}`, {
     method: 'delete',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
   })
   .then(res => {
     // Valid login if we have a status of 2xx (res.ok)

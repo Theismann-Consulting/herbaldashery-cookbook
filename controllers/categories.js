@@ -21,8 +21,11 @@ async function index(req, res, next) {
 
 async function show(req, res) {
   try {
-    await Category.findById(req.params.id, function(err, category) {
-        res.json({ category });
+    await Category.findById(req.params.id)
+      .populate('recipes')
+      .exec(
+        function(err, category) {
+          res.json({ category });
     });
   } catch(err) {
     res.status(400).json(err);

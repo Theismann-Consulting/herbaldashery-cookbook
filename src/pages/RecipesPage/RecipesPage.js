@@ -35,9 +35,9 @@ class RecipesPage extends Component {
     return (
       <Container>
         <Row className="justify-content-center">
-          <Button className="float-right" variant="info" as={ Link } to='/recipes/new'>Create Recipe</Button><br />
+        {this.props.user.role === 'Admin' && <Button className="float-right" variant="info" as={ Link } to='/recipes/new'>Create Recipe</Button>}
         </Row>
-       <RecipesList state={this.state}/>>
+       <RecipesList state={this.state}/>
       </Container>
     );
   };

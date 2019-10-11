@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
-import { Card, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import userService from '../../utils/userService';
 
 class UserViewPage extends Component {

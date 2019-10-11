@@ -8,26 +8,20 @@ const categoriesCtrl = require('../../controllers/categories');
 
 /*---------- Protected Routes ----------*/
 
-// router.use(require('../../config/auth'));
+router.use(require('../../config/auth'));
 
-router.get('/', categoriesCtrl.index);
-// router.get('/new', categoriesCtrl.new);
-router.get('/:id', categoriesCtrl.show);
-// router.get('/:id/edit', categoriesCtrl.edit);
-// router.get('/:id/users', categoriesCtrl.showUsers);
-router.post('/', categoriesCtrl.create);
-// router.post('/:id/recipes', categoriesCtrl.addRecipe);
-// router.post('/:id/users', categoriesCtrl.addUser);
-// router.put('/:id', categoriesCtrl.update);
-// router.delete('/:id', categoriesCtrl.delete);
-// router.delete('/:id/recipes/', categoriesCtrl.removeRecipe);
-// router.delete('/:id/users', categoriesCtrl.removeUser);
+router.get('/', isLoggedIn, categoriesCtrl.index);
+router.get('/:id', isLoggedIn, categoriesCtrl.show);
+router.post('/', isContributor, isAdmin, categoriesCtrl.create);
+router.put('/:id', isContributor, isAdmin, categoriesCtrl.update);
+router.delete('/:id', isAdmin, categoriesCtrl.delete);
+
 
 
 /*----- Helper Functions -----*/
 
 function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) return next();
+  if (req.user) return next();
   return res.status(401).json({msg: 'Not Authorized: Please Log In'});
 }
 

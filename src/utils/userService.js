@@ -22,7 +22,10 @@ function signup(user) {
 function update(user, userId) {
   return fetch(BASE_URL + `${userId}`, {
     method: 'PUT',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
     body: JSON.stringify(user)
   })
   .then(res => {
@@ -56,7 +59,10 @@ function login(creds) {
 function getUsers(){
   return fetch(BASE_URL + '', {
     method: 'get',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
   })
   .then(res => {
     // Valid login if we have a status of 2xx (res.ok)
@@ -68,7 +74,10 @@ function getUsers(){
 function getUser(userId){
   return fetch(BASE_URL + `${userId}`, {
     method: 'get',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
   })
   .then(res => {
     // Valid login if we have a status of 2xx (res.ok)
@@ -80,7 +89,10 @@ function getUser(userId){
 function deleteUser(userId){
   return fetch(BASE_URL + `${userId}`, {
     method: 'delete',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
   })
   .then(res => {
     // Valid login if we have a status of 2xx (res.ok)

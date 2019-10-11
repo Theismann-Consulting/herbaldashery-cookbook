@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import UsersPage from '../UsersPage/UsersPage';
 import LoginPage from '../LoginPage/LoginPage';
 import UserViewPage from '../UserViewPage/UserViewPage';
@@ -11,8 +11,13 @@ import RecipeEditPage from '../RecipeEditPage/RecipeEditPage';
 import MealPlansPage from '../MealPlansPage/MealPlansPage';
 import MealPlanViewPage from '../MealPlanViewPage/MealPlanViewPage';
 import MealPlanEditPage from '../MealPlanEditPage/MealPlanEditPage';
+import CategoryPage from '../CategoryPage/CategoryPage';
+import CategoryViewPage from '../CategoryViewPage/CategoryViewPage';
+import CategoryEditPage from '../CategoryEditPage/CategoryEditPage';
 import userService from '../../utils/userService';
 import Navigation from '../../components/Navigation/Navigation';
+import HomePage from '../../components/HomePage';
+
 
 class App extends Component {
   constructor() {
@@ -46,14 +51,22 @@ class App extends Component {
         handleLogout={this.handleLogout}
         handleSignupOrLogin={this.handleSignupOrLogin}
         />
+
           <Switch>
-            <Route exact path='/signup' render={({ history }) => 
+            <Route exact path='/' render={({ history }) => 
+              <HomePage
+                history={history}
+                state={this.state}
+              />
+            }/>
+
+            <Route exact path='/' render={({ history }) => 
               <UserEditPage
                 history={history}
                 handleSignupOrLogin={this.handleSignupOrLogin}
-                
               />
             }/>
+
             <Route exact path='/login' render={({ history }) => 
               <LoginPage
                 history={history}
@@ -61,81 +74,143 @@ class App extends Component {
               />
             }/>
 
-            <Route exact path='/users' render={({ history }) =>
+            <Route exact path='/users' render={({ history }) => (
+              this.state.user.role === 'Admin' ?
               <UsersPage
                 history={history}
                 user={this.state.user}
               />
-            }/>    
-            <Route exact path='/users/:id' render={(props) => 
+              :
+                <Redirect to='/login'/>
+            )}/>    
+            <Route exact path='/users/:id' render={(props) => (
+              this.state.user.role === 'Admin' ?
               <UserViewPage
                 {...props}
                 history={props.history}
                 user={this.state.user}
               />
-            }/>      
+            :
+                <Redirect to='/login'/>
+            )}/>      
 
-            <Route exact path='/users/:id/edit' render={(props) => 
+            <Route exact path='/users/:id/edit' render={(props) => (
+              this.state.user.role === 'Admin' ?
               <UserEditPage
                 {...props}
                 history={props.history}
                 user={this.state.user}
               />
-            }/>    
+            :
+                <Redirect to='/login'/>
+            )}/>    
             
-            <Route exact path='/recipes' render={({ history }) =>
+            <Route exact path='/recipes' render={({ history }) => (
+              this.state.user.role === 'Admin' ?
               <RecipesPage
                 history={history}
                 user={this.state.user}
               />
-            }/>    
+            :
+                <Redirect to='/login'/>
+            )}/>    
 
-            <Route exact path='/recipes/new' render={(props) => 
+            <Route exact path='/recipes/new' render={(props) => (
+              this.state.user.role === 'Admin' ?
               <RecipeEditPage
                 {...props}
                 history={props.history}
                 user={this.state.user}
               />
-            }/>  
+            :
+                <Redirect to='/login'/>
+            )}/>  
               
-            <Route exact path='/recipes/:id' render={(props) => 
+            <Route exact path='/recipes/:id' render={(props) => (
+              this.state.user.role === 'Admin' ?
               <RecipeViewPage
                 {...props}
                 history={props.history}
                 user={this.state.user}
               />
-            }/>      
+            :
+                <Redirect to='/login'/>
+            )}/>      
 
-            <Route exact path='/recipes/:id/edit' render={(props) => 
+            <Route exact path='/recipes/:id/edit' render={(props) => (
+              this.state.user.role === 'Admin' ?
               <RecipeEditPage
                 {...props}
                 history={props.history}
                 user={this.state.user}
               />
-            }/>    
+            :
+                <Redirect to='/login'/>
+            )}/>    
 
-            <Route exact path='/mealPlans' render={({ history }) =>
+            <Route exact path='/mealPlans' render={({ history }) => (
+              this.state.user.role === 'Admin' ?
               <MealPlansPage
                 history={history}
                 user={this.state.user}
               />
-            }/>    
+            :
+                <Redirect to='/login'/>
+            )}/>    
               
-            <Route exact path='/mealPlans/:id' render={(props) => 
+            <Route exact path='/mealPlans/:id' render={(props) => (
+              this.state.user.role === 'Admin' ?
               <MealPlanViewPage
                 {...props}
                 history={props.history}
                 user={this.state.user}
               />
-            }/>      
+            :
+                <Redirect to='/login'/>
+            )}/>      
 
-            <Route exact path='/mealPlans/:id/edit' render={(props) => 
+            <Route exact path='/mealPlans/:id/edit' render={(props) => (
+              this.state.user.role === 'Admin' ?
               <MealPlanEditPage
                 {...props}
                 history={props.history}
                 user={this.state.user}
               />
-            }/>    
+            :
+                <Redirect to='/login'/>
+            )}/>    
+
+            <Route exact path='/categories' render={({ history }) => (
+              this.state.user.role === 'Admin' ?
+              <CategoryPage
+                history={history}
+                user={this.state.user}
+              />
+            :
+                <Redirect to='/login'/>
+            )}/>    
+              
+            <Route exact path='/categories/:id' render={(props) => (
+              this.state.user.role === 'Admin' ?
+              <CategoryViewPage
+                {...props}
+                history={props.history}
+                user={this.state.user}
+              />
+            :
+                <Redirect to='/login'/>
+            )}/>      
+
+            <Route exact path='/categories/:id/edit' render={(props) => (
+              this.state.user.role === 'Admin' ?
+              <CategoryEditPage
+                {...props}
+                history={props.history}
+                user={this.state.user}
+              />
+            :
+                <Redirect to='/login'/>
+            )}/>    
 
 
           </Switch>

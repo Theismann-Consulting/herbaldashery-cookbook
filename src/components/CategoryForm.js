@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, Container, Toast } from 'react-bootstrap';
+import { Button, Form, } from 'react-bootstrap';
 import categoryService from '../utils/categoryService';
 import 'react-quill/dist/quill.snow.css';
 

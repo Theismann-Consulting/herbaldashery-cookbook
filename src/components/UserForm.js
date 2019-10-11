@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import userService from '../utils/userService';
-import { thisTypeAnnotation } from '@babel/types';
 
 class UserForm extends Component {
 

@@ -1,9 +1,14 @@
+import tokenService from './tokenService';
+
 const BASE_URL = '/api/recipes/';
 
 function create(recipe) {
   return fetch(BASE_URL + '', {
     method: 'POST',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
     body: JSON.stringify(recipe)
   })
   .then(res => {
@@ -17,7 +22,10 @@ function create(recipe) {
 function update(recipe, recipeId) {
   return fetch(BASE_URL + `${recipeId}`, {
     method: 'PUT',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
     body: JSON.stringify(recipe)
   })
   .then(res => {
@@ -29,7 +37,10 @@ function update(recipe, recipeId) {
 function getRecipes(){
   return fetch(BASE_URL + '', {
     method: 'get',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
   })
   .then(res => {
     // Valid login if we have a status of 2xx (res.ok)
@@ -41,7 +52,10 @@ function getRecipes(){
 function getRecipe(recipeId){
   return fetch(BASE_URL + `${recipeId}`, {
     method: 'get',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
   })
   .then(res => {
     // Valid login if we have a status of 2xx (res.ok)
@@ -53,7 +67,10 @@ function getRecipe(recipeId){
 function deleteRecipe(recipeId){
   return fetch(BASE_URL + `${recipeId}`, {
     method: 'delete',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
   })
   .then(res => {
     // Valid login if we have a status of 2xx (res.ok)

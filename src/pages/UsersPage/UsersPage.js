@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Card, Button, ListGroup, ListGroupItem, Container, Row } from 'react-bootstrap';
 import userService from '../../utils/userService';
 

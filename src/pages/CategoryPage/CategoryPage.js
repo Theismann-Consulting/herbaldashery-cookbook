@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Button, ListGroup, ListGroupItem, Container, Row } from 'react-bootstrap';
-import mealPlanService from '../../utils/mealPlanService';
+import categoryService from '../../utils/categoryService';
 
-class MealPlansPage extends Component {
+class CategoriesPage extends Component {
   state = {
-    mealPlans: [],
+    categories: [],
     loading: true,
   }
 
   async componentDidMount(){
-    const mealPlans = await mealPlanService.getMealPlans();
-    console.log(mealPlans.mealPlans);
+    const categories = await categoryService.getCategories();
+    console.log(categories.categories);
     this.setState({
-      mealPlans: mealPlans.mealPlans,
+      categories: categories.categories,
       loading: false,
     });
   };
 
   async componentDidUpdate(prevProps, prevState){
-    if (this.state.mealPlans.mealPlans !== prevState.mealPlans.mealPlans) {
-      const mealPlans= await mealPlanService.getMealPlans();
+    if (this.state.categories.categories !== prevState.categories.categories) {
+      const categories= await categoryService.getCategories();
 
-      this.setState({ mealPlans: mealPlans.mealPlans });
+      this.setState({ categories: categories.categories });
     }
   }
 
@@ -35,21 +35,22 @@ class MealPlansPage extends Component {
     return (
       <Container>
         <Row className="justify-content-center">
-        {this.props.user.role === 'Admin' && <Button className="float-right" variant="info" as={ Link } to='/mealPlans/new'>Create MealPlan</Button>}
+        {this.props.user.role === 'Admin' &&
+          <Button className="float-right" variant="info" as={ Link } to='/categories/new'>Create Category</Button>}
         </Row>
         <Row className="justify-content-center">
-          {this.state.mealPlans.map((mealPlan, idx) =>
+          {this.state.categories.map((category, idx) =>
           
           <Card style={{ width: '20rem' }}>
             {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
             <Card.Body>
-              <Card.Title>{ mealPlan.name }</Card.Title>
+              <Card.Title>{ category.name }</Card.Title>
             </Card.Body>
             <ListGroup className="list-group-flush">
-              <ListGroupItem>{mealPlan.description}</ListGroupItem>
+              <ListGroupItem>{category.description}</ListGroupItem>
             </ListGroup>
             <Card.Body>
-            <Button variant="info" as={ Link } to={`/mealPlans/${mealPlan._id}`}>View MealPlan</Button>
+            <Button variant="info" as={ Link } to={`/categories/${category._id}`}>View Category</Button>
             </Card.Body>
           </Card>
           )}
@@ -59,4 +60,4 @@ class MealPlansPage extends Component {
   };
 };
 
-export default MealPlansPage;
+export default CategoriesPage;

@@ -8,24 +8,20 @@ const mealPlansCtrl = require('../../controllers/mealPlans');
 
 /*---------- Protected Routes ----------*/
 
-// router.use(require('../../config/auth'));
+router.use(require('../../config/auth'));
 
-router.get('/', mealPlansCtrl.index);
-router.get('/:id', mealPlansCtrl.show);
-// router.get('/:id/users', mealPlansCtrl.showUsers);
-router.post('/', mealPlansCtrl.create);
-// router.post('/:id/recipes', mealPlansCtrl.addRecipe);
-// router.post('/:id/users', mealPlansCtrl.addUser);
-router.put('/:id', mealPlansCtrl.update);
-// router.delete('/:id', mealPlansCtrl.delete);
-// router.delete('/:id/recipes/', mealPlansCtrl.removeRecipe);
-// router.delete('/:id/users', mealPlansCtrl.removeUser);
+router.get('/', isLoggedIn, mealPlansCtrl.index);
+router.get('/:id', isLoggedIn, mealPlansCtrl.show);
+router.post('/', isContributor, isAdmin, mealPlansCtrl.create);
+router.put('/:id', isContributor, isAdmin, mealPlansCtrl.update);
+router.delete('/:id', isAdmin, mealPlansCtrl.delete);
+
 
 
 /*----- Helper Functions -----*/
 
 function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) return next();
+  if (req.user) return next();
   return res.status(401).json({msg: 'Not Authorized: Please Log In'});
 }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
-import { Card, Button, ListGroup, ListGroupItem, Table, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Card, ListGroup, ListGroupItem, Row, Col } from 'react-bootstrap';
 import recipeService from '../../utils/recipeService';
 import ingredientService from '../../utils/ingredientService';
 import RecipeIngredients from '../../components/RecipeIngredients';
@@ -76,10 +76,11 @@ class RecipeViewPage extends Component {
               <RecipeIngredients state={this.state} />
             </ListGroupItem>
           </ListGroup>
+          {this.props.user.role === 'Admin' &&
           <Card.Body>
             <Card.Link as={ Link } to={`/recipes/${this.state.recipe._id}/edit`}>Edit Recipe</Card.Link>
             <Card.Link as={ Link } to='/recipes' onClick={this.handleDelete}>Delete Recipe</Card.Link>
-          </Card.Body>
+          </Card.Body>}
         </Card>
       </div>
     )

@@ -1,9 +1,14 @@
+import tokenService from './tokenService';
+
 const BASE_URL = '/api/ingredients/';
 
 function create(ingredient) {
   return fetch(BASE_URL + '', {
     method: 'POST',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+      }),
     body: JSON.stringify(ingredient)
   })
   .then(res => {
@@ -16,7 +21,10 @@ function create(ingredient) {
 function update(ingredient, ingredientId) {
   return fetch(BASE_URL + `${ingredientId}`, {
     method: 'PUT',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
     body: JSON.stringify(ingredient)
   })
   .then(res => {
@@ -28,7 +36,10 @@ function update(ingredient, ingredientId) {
 function getIngredients(){
   return fetch(BASE_URL + '', {
     method: 'get',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
   })
   .then(res => {
     // Valid login if we have a status of 2xx (res.ok)
@@ -40,7 +51,10 @@ function getIngredients(){
 function getIngredient(ingredientId){
   return fetch(BASE_URL + `${ingredientId}`, {
     method: 'get',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
   })
   .then(res => {
     // Valid login if we have a status of 2xx (res.ok)
@@ -52,7 +66,10 @@ function getIngredient(ingredientId){
 function deleteIngredient(ingredientId){
   return fetch(BASE_URL + `${ingredientId}`, {
     method: 'delete',
-    headers: new Headers({'Content-Type': 'application/json'}),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
   })
   .then(res => {
     // Valid login if we have a status of 2xx (res.ok)
