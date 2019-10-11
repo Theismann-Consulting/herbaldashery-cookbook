@@ -60,7 +60,7 @@ class App extends Component {
               />
             }/>
 
-            <Route exact path='/' render={({ history }) => 
+            <Route exact path='/signup' render={({ history }) => 
               <UserEditPage
                 history={history}
                 handleSignupOrLogin={this.handleSignupOrLogin}
