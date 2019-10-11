@@ -41,10 +41,11 @@ class RecipeForm extends Component {
     allMealPlans: [],
     message: '',
     ingredientForm: false,
-    ingredientsInput: {},
+    ingredientsInput: '',
     ingredientsAmountInput: '',
     mealPlanForm: false,
     categoryForm: false,
+    loading: true,
   };
   
   quill = {
@@ -89,6 +90,7 @@ class RecipeForm extends Component {
         greeting: `Edit ${recipe.recipe.name} Recipe`,        
       })
     }
+    this.setState({loading: false});
   }
 
   updateIngredients = async () => {
@@ -97,8 +99,8 @@ class RecipeForm extends Component {
   }
 
   updateCategories = async () => {
-      const category= await this.getAllCategories();
-      this.setState({ allCategories: category.category });
+      const categories= await this.getAllCategories();
+      this.setState({ allCategories: categories.categories });
   }
 
   updateMealPlans = async () => {
@@ -124,86 +126,94 @@ class RecipeForm extends Component {
     this.instructions.string = editor.getText(content);
   }
   
-  handleAddCategory = async () => {
-    let category = [...this.state.category];
-    let categoryNames = [...this.state.categoryNames];
-    let cName = await this.getCategoryName(this.state.categoryInput);
-    category.push(this.state.categoryInput);
-    categoryNames.push(cName);
-    this.setState({
-      category: category,
-      categoryNames: categoryNames,
-      categoryInput: '',
-    });
+  handleAddCategory = async (e) => {
+    if(this.state.categoryInput){
+      let category = [...this.state.category];
+      let categoryNames = [...this.state.categoryNames];
+      let cName = await this.getCategoryName(this.state.categoryInput);
+      category.push(this.state.categoryInput);
+      categoryNames.push(cName);
+      this.setState({
+        category: category,
+        categoryNames: categoryNames,
+        categoryInput: '',
+      });
+    } else {return};
   }
 
   handleRemoveCategory = (e) => {
-    let selection = this.state.categoryRemove;
-    let category = [...this.state.category];
-    let categoryNames = [...this.state.categoryNames];
-    let cat;
-    if(selection._id){
-      category.filter(function(val, idx, arr){
-        if(val._id == selection._id){
+    if(this.state.categoryRemove){
+      let selection = this.state.categoryRemove;
+      let category = [...this.state.category];
+      let categoryNames = [...this.state.categoryNames];
+      let cat;
+      if(selection._id){
+        category.filter(function(val, idx, arr){
+          if(val._id == selection._id){
+            cat = idx;
+          }
+        });
+        category.splice(cat, 1);
+      } else {
+        category.filter(function(val, idx, arr){
+          if(val == selection){
+            categoryNames.splice(idx, 1)
+          }
           cat = idx;
-        }
-      });
-      category.splice(cat, 1);
-    } else {
-      category.filter(function(val, idx, arr){
-        if(val == selection){
-          categoryNames.splice(idx, 1)
-        }
-        cat = idx;
-      },
-      );
-      category.splice(cat, 1);
-    }
-    this.setState({
-      category: category,
-      categoryNames: categoryNames,
-    })
+        },
+        );
+        category.splice(cat, 1);
+      }
+      this.setState({
+        category: category,
+        categoryNames: categoryNames,
+      })
+    } else {return};
   }
 
   handleAddMealPlan = async () => {
-    let mealPlan = [...this.state.mealPlan];
-    let mealPlanNames = [...this.state.mealPlanNames];
-    let mName = await this.getMealPlanName(this.state.mealPlanInput);
-    mealPlan.push(this.state.mealPlanInput);
-    mealPlanNames.push(mName);
-    this.setState({
-      mealPlan: mealPlan,
-      mealPlanNames: mealPlanNames,
-      mealPlanInput: '',
-    });
+    if(this.state.mealPlanInput){
+      let mealPlan = [...this.state.mealPlan];
+      let mealPlanNames = [...this.state.mealPlanNames];
+      let mName = await this.getMealPlanName(this.state.mealPlanInput);
+      mealPlan.push(this.state.mealPlanInput);
+      mealPlanNames.push(mName);
+      this.setState({
+        mealPlan: mealPlan,
+        mealPlanNames: mealPlanNames,
+        mealPlanInput: '',
+      });
+    } else {return};
   }
 
   handleRemoveMealPlan = (e) => {
-    let selection = this.state.mealPlanRemove;
-    let mealPlan = [...this.state.mealPlan];
-    let mealPlanNames = [...this.state.mealPlanNames];
-    let mp;
-    if(selection._id){
-      mealPlan.filter(function(val, idx, arr){
-        if(val._id == selection._id){
+    if(this.state.mealPlanRemove){
+      let selection = this.state.mealPlanRemove;
+      let mealPlan = [...this.state.mealPlan];
+      let mealPlanNames = [...this.state.mealPlanNames];
+      let mp;
+      if(selection._id){
+        mealPlan.filter(function(val, idx, arr){
+          if(val._id == selection._id){
+            mp = idx;
+          }
+        });
+        mealPlan.splice(mp, 1);
+      } else {
+        mealPlan.filter(function(val, idx, arr){
+          if(val == selection){
+            mealPlanNames.splice(idx, 1)
+          }
           mp = idx;
-        }
-      });
-      mealPlan.splice(mp, 1);
-    } else {
-      mealPlan.filter(function(val, idx, arr){
-        if(val == selection){
-          mealPlanNames.splice(idx, 1)
-        }
-        mp = idx;
-      },
-      );
-      mealPlan.splice(mp, 1);
-    }
-    this.setState({
-      mealPlan: mealPlan,
-      mealPlanNames: mealPlanNames,
-    })
+        },
+        );
+        mealPlan.splice(mp, 1);
+      }
+      this.setState({
+        mealPlan: mealPlan,
+        mealPlanNames: mealPlanNames,
+      })
+    } else {return}
   }
 
   quillSave = () => {
@@ -233,20 +243,22 @@ class RecipeForm extends Component {
   }
 
   handleAddIngredient = async () => {
-    let ingredients = [...this.state.ingredients];
-    let amount = [...this.state.ingredientsAmount];
-    let ingredientsName = [...this.state.ingredientsName];
-    let iName = await this.getIngredientName(this.state.ingredientsInput);
-    ingredients.push(this.state.ingredientsInput);
-    amount.push(this.state.ingredientsAmountInput);
-    ingredientsName.push(iName);
-    this.setState({
-      ingredients: ingredients,
-      ingredientsAmount: amount,
-      ingredientsInput: '',
-      ingredientsAmountInput: '',
-      ingredientsName: ingredientsName, 
-    });
+    if(this.state.ingredientsInput){
+      let ingredients = [...this.state.ingredients];
+      let amount = [...this.state.ingredientsAmount];
+      let ingredientsName = [...this.state.ingredientsName];
+      let iName = await this.getIngredientName(this.state.ingredientsInput);
+      ingredients.push(this.state.ingredientsInput);
+      amount.push(this.state.ingredientsAmountInput);
+      ingredientsName.push(iName);
+      this.setState({
+        ingredients: ingredients,
+        ingredientsAmount: amount,
+        ingredientsInput: '',
+        ingredientsAmountInput: '',
+        ingredientsName: ingredientsName, 
+      });
+    } else {return}
   }
 
   isFormInvalid() {
@@ -347,6 +359,10 @@ class RecipeForm extends Component {
 /*-------------------------------------- Render -----------------------------------*/
 
   render() {
+    if(this.state.loading){
+      return(
+      <div>Loading...</div>
+      )};
     return (
       <Container>
         <h3>{this.state.greeting}</h3>
@@ -412,7 +428,7 @@ class RecipeForm extends Component {
                         <Form.Control value={`${this.state.ingredientsName[idx]}`} disabled />
                       )}
                       <Form.Control as="select" name="ingredientsInput" onChange={this.handleChange}>
-                          <option disabled>None</option>
+                          <option disabled selected>None</option>
                           {this.state.allIngredients.map((ingredient, idx) =>
                             <option value={`${ingredient._id}`}>{ingredient.name}</option>
                           )}
@@ -433,7 +449,6 @@ class RecipeForm extends Component {
                     {this.state.categoryForm && 
                     <Button className='btn-sm float-right' variant='info' onClick={this.closeCategoryForm}>Close Category Form</Button>}
                 <Form.Control as="select" name="categoryInput" onChange={this.handleChange} multiple>
-                  <option selected disabled>None</option>
                   {this.state.allCategories.map((category, idx) =>
                     <option value={`${category._id}`}>{category.name}</option>
                   )}
@@ -466,7 +481,6 @@ class RecipeForm extends Component {
                     {this.state.mealPlanForm && 
                     <Button className='btn-sm float-right' variant='info' onClick={this.closeMealPlanForm}>Close MealPlan Form</Button>}
                 <Form.Control as="select" name="mealPlanInput" onChange={this.handleChange} multiple>
-                  <option selected disabled>None</option>
                   {this.state.allMealPlans.map((mealPlan, idx) =>
                     <option value={`${mealPlan._id}`}>{mealPlan.name}</option>
                   )}
@@ -488,7 +502,9 @@ class RecipeForm extends Component {
               </Form.Group>
             </Form.Row>
               <Form.Group>
-                {this.state.mealPlanForm && <MealPlanForm updateMealPlans={this.updateMealPlans} />}
+                {this.state.mealPlanForm && <MealPlanForm 
+                closeMealPlanForm={this.closeMealPlanForm}
+                updateMealPlans={this.updateMealPlans} />}
               </Form.Group>
             <Button variant="primary" type="submit" onClick={this.handleSubmit}>
               Submit

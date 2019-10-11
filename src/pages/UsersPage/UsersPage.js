@@ -2,16 +2,19 @@ import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
 import { Card, Button, ListGroup, ListGroupItem, Container, Row } from 'react-bootstrap';
 import userService from '../../utils/userService';
-import UserEditPage from '../UserEditPage/UserEditPage';
 
 class UsersPage extends Component {
   state = {
     users: [],
+    loading: true,
   }
 
   async componentDidMount(){
     const users = await userService.getUsers();
-    this.setState({ users: users.users });
+    this.setState({ 
+      users: users.users,
+      loading: false,
+    });
   };
 
     async componentDidUpdate(prevProps, prevState){
@@ -23,6 +26,9 @@ class UsersPage extends Component {
   }
 
   render() {
+    if(this.state.loading){
+      return <div>Loading...</div>
+    }
     return (
       <Container>
         <Row className="justify-content-center">

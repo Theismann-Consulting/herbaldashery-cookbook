@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import UserForm from '../../components/UserForm';
+import { Container } from 'react-bootstrap';
 
 class UserEditPage extends Component {
   constructor(props) {
@@ -13,10 +14,12 @@ class UserEditPage extends Component {
 
   render() {
     return (
+      <Container>
       <div className='UserEditPage'>
         <UserForm {...this.props} updateMessage={this.updateMessage} />
         <p>{this.state.message}</p>
       </div>
+      </Container>
     );
   }
 }

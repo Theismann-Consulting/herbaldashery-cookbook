@@ -1,4 +1,6 @@
 const MealPlan = require('../models/mealPlan');
+const User = require('../models/user');
+const Recipe = require('../models/recipe');
 
 module.exports = {
   create,
@@ -21,7 +23,12 @@ async function index(req, res, next) {
 
 async function show(req, res) {
   try {
-    await MealPlan.findById(req.params.id, function(err, mealPlan) {
+    await MealPlan.findById(req.params.id)
+      .populate('recipes')
+      .populate('assignedUsers')
+      .exec(
+        function(err, mealPlan) {
+          console.log(mealPlan);
         res.json({ mealPlan });
     });
   } catch(err) {
@@ -32,6 +39,14 @@ async function show(req, res) {
 async function update(req, res) {
   try {
     await MealPlan.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, mealPlan){
+      req.body.assignedUsers.forEach(function(u){
+        User.findByIdAndUpdate(u, {$push: {mealPlansAssigned: mealPlan._id}}, {new: true}, function(err, i){
+        });
+      });
+      req.body.recipes.forEach(function(r){
+        Recipe.findByIdAndUpdate(r, {$push: {mealPlans: mealPlan._id}}, {new: true}, function(err, r){
+        });
+      });
       res.json({ mealPlan });
     })
   } catch (err) {

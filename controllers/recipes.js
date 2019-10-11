@@ -24,7 +24,11 @@ async function index(req, res, next) {
 
 async function show(req, res) {
   try {
-    await Recipe.findById(req.params.id, function(err, recipe){
+    await Recipe.findById(req.params.id)
+      .populate('ingredients')
+      .populate('category')
+      .exec(
+        function(err, recipe){
         res.json({ recipe });
     });
   } catch(err) {
@@ -36,16 +40,15 @@ async function update(req, res) {
   try {
     await Recipe.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, recipe){
       req.body.ingredients.forEach(function(i){
-        Ingredient.findByIdAndUpdate(i, {$push: {recipe: recipe._id}}, {new: true}, function(err, i){
-          console.log('error:', err, 'ingredient:', i);
+        Ingredient.findByIdAndUpdate(i, {$push: {recipes: recipe._id}}, {new: true}, function(err, i){
         });
       });
       req.body.category.forEach(function(cat){
-        Category.findByIdAndUpdate(cat, {$push: {recipe: recipe._id}}, {new: true}, function(err){
+        Category.findByIdAndUpdate(cat, {$push: {recipes: recipe._id}}, {new: true}, function(err, c){
         });
       });
       req.body.mealPlan.forEach(function(mealPlan){
-        MealPlan.findByIdAndUpdate(mealPlan, {$push: {recipe: recipe._id}}, {new: true}, function(err){
+        MealPlan.findByIdAndUpdate(mealPlan, {$push: {recipes: recipe._id}}, {new: true}, function(err, mp){
         });
       });
       res.json({ recipe });
@@ -60,16 +63,15 @@ async function deleteRecipe(req, res, next) {
   try {
     await Recipe.findByIdAndDelete(req.params.id, function(err, recipe) {
       recipe.ingredients.forEach(function(i){
-        Ingredient.findByIdAndUpdate(i, {$pull: {recipe: recipe._id}}, {new: true}, function(err, i){
-          console.log('error:', err, 'ingredient:', i);
+        Ingredient.findByIdAndUpdate(i, {$pull: {recipes: recipe._id}}, {new: true}, function(err, i){
         });
       });
       recipe.category.forEach(function(cat){
-        Category.findByIdAndUpdate(cat, {$pull: {recipe: recipe._id}}, {new: true}, function(err){
+        Category.findByIdAndUpdate(cat, {$pull: {recipes: recipe._id}}, {new: true}, function(err, c){
         });
       });
       recipe.mealPlan.forEach(function(mealPlan){
-        MealPlan.findByIdAndUpdate(mealPlan, {$pull: {recipe: recipe._id}}, {new: true}, function(err){
+        MealPlan.findByIdAndUpdate(mealPlan, {$pull: {recipes: recipe._id}}, {new: true}, function(err, mp){
         });
       });
     res.json({ recipe });
@@ -85,16 +87,15 @@ async function create(req, res) {
   try {
     await recipe.save(function(err, recipe){
       req.body.ingredients.forEach(function(i){
-        Ingredient.findByIdAndUpdate(i, {$push: {recipe: recipe._id}}, {new: true}, function(err, i){
-          console.log('error:', err, 'ingredient:', i);
+        Ingredient.findByIdAndUpdate(i, {$push: {recipes: recipe._id}}, {new: true}, function(err, i){
         });
       });
       req.body.category.forEach(function(cat){
-        Category.findByIdAndUpdate(cat, {$push: {recipe: recipe._id}}, {new: true}, function(err){
+        Category.findByIdAndUpdate(cat, {$push: {recipes: recipe._id}}, {new: true}, function(err){
         });
       });
       req.body.mealPlan.forEach(function(mealPlan){
-        MealPlan.findByIdAndUpdate(mealPlan, {$push: {recipe: recipe._id}}, {new: true}, function(err){
+        MealPlan.findByIdAndUpdate(mealPlan, {$push: {recipes: recipe._id}}, {new: true}, function(err){
         });
       });
       res.json({ recipe });

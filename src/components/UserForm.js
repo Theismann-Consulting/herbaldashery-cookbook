@@ -12,20 +12,27 @@ class UserForm extends Component {
     password: '',
     passwordConf: '',
     role: 'User',
-    greeting: 'New User Information'
+    greeting: 'New User Information',
+    edit: false,
   };
 
   async componentDidMount(){
-
     if(this.props.match && this.props.match.params.id) {
       const user = await userService.getUser(this.props.match.params.id);
       this.setState({
         name: user.user.name,
         email: user.user.email,
         role: user.user.role,
-        greeting: `${user.user.name}'s User Information`
+        greeting: `${user.user.name}'s User Information`,
+        edit: true,
       })
     }
+  }
+
+  setEdit = () => {
+    this.setState({
+      edit: false,
+    })
   }
 
   handleChange = (e) => {
@@ -59,6 +66,29 @@ class UserForm extends Component {
     return !(this.state.name && this.state.email && this.state.password === this.state.passwordConf);
   }
 
+  showPasswordFields = () => {
+    if(!this.state.edit){
+      return(
+        <div>
+        <Form.Group controlId="formPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control type="password" name="password" placeholder="Password" onChange={this.handleChange} value={this.state.password || ''} />
+          </Form.Group>
+
+          <Form.Group controlId="formPasswordConf">
+            <Form.Label>Confirm Password</Form.Label>
+            <Form.Control type="password" name="passwordConf" placeholder="Confirm Your Password" onChange={this.handleChange} value={this.state.passwordConf || ''} />
+          </Form.Group>
+          </div>
+      )
+    }
+    return(
+    <div>
+    <Button variant='danger' className='btn-sm' onClick={this.setEdit}>Change Password</Button>
+    </div>
+    )
+  }
+
   render() {
     return (
       <div>
@@ -77,15 +107,7 @@ class UserForm extends Component {
             </Form.Text>
           </Form.Group>
 
-          <Form.Group controlId="formPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control type="password" name="password" placeholder="Password" onChange={this.handleChange} value={this.state.password || ''} />
-          </Form.Group>
-
-          <Form.Group controlId="formPasswordConf">
-            <Form.Label>Confirm Password</Form.Label>
-            <Form.Control type="password" name="passwordConf" placeholder="Confirm Your Password" onChange={this.handleChange} value={this.state.passwordConf || ''} />
-          </Form.Group>
+          {this.showPasswordFields()}
 
           <Form.Group controlId="formRole">
             <Form.Label>Select Role</Form.Label>

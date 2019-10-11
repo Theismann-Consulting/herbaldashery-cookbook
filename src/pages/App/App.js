@@ -8,6 +8,9 @@ import UserEditPage from '../UserEditPage/UserEditPage';
 import RecipesPage from '../RecipesPage/RecipesPage';
 import RecipeViewPage from '../RecipeViewPage/RecipeViewPage';
 import RecipeEditPage from '../RecipeEditPage/RecipeEditPage';
+import MealPlansPage from '../MealPlansPage/MealPlansPage';
+import MealPlanViewPage from '../MealPlanViewPage/MealPlanViewPage';
+import MealPlanEditPage from '../MealPlanEditPage/MealPlanEditPage';
 import userService from '../../utils/userService';
 import Navigation from '../../components/Navigation/Navigation';
 
@@ -18,6 +21,12 @@ class App extends Component {
       user: '',
       // recipes: recipeService.getRecipes(),
     }
+  }
+
+  componentDidMount(){
+    this.setState({
+      user: userService.getCurrUser()
+    })
   }
 
   handleLogout = () => {
@@ -99,6 +108,29 @@ class App extends Component {
 
             <Route exact path='/recipes/:id/edit' render={(props) => 
               <RecipeEditPage
+                {...props}
+                history={props.history}
+                user={this.state.user}
+              />
+            }/>    
+
+            <Route exact path='/mealPlans' render={({ history }) =>
+              <MealPlansPage
+                history={history}
+                user={this.state.user}
+              />
+            }/>    
+              
+            <Route exact path='/mealPlans/:id' render={(props) => 
+              <MealPlanViewPage
+                {...props}
+                history={props.history}
+                user={this.state.user}
+              />
+            }/>      
+
+            <Route exact path='/mealPlans/:id/edit' render={(props) => 
+              <MealPlanEditPage
                 {...props}
                 history={props.history}
                 user={this.state.user}

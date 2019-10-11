@@ -7,11 +7,15 @@ class UserViewPage extends Component {
   state = {
     user: '',
     message: '',
+    loading: true,
   }
 
   async componentDidMount() {
     const user = await userService.getUser(this.props.match.params.id);
-    this.setState({user: user.user});
+    this.setState({
+      user: user.user,
+      loading: false,
+    });
   };
 
   updateMessage = (msg) => {
@@ -32,6 +36,11 @@ class UserViewPage extends Component {
 
 
   render() {
+    if(this.state.loading){
+      return(
+        <div>Loading...</div>
+      )
+    }
     return (
       <div className="body">
       <h3>{this.state.message}</h3>

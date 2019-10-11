@@ -16,7 +16,7 @@ router.get('/:id', mealPlansCtrl.show);
 router.post('/', mealPlansCtrl.create);
 // router.post('/:id/recipes', mealPlansCtrl.addRecipe);
 // router.post('/:id/users', mealPlansCtrl.addUser);
-// router.put('/:id', mealPlansCtrl.update);
+router.put('/:id', mealPlansCtrl.update);
 // router.delete('/:id', mealPlansCtrl.delete);
 // router.delete('/:id/recipes/', mealPlansCtrl.removeRecipe);
 // router.delete('/:id/users', mealPlansCtrl.removeUser);

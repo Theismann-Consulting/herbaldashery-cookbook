@@ -5,12 +5,10 @@ const ingredientsSchema = new mongoose.Schema({
   contributor: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    autopopulate: true,
   },
-  recipe: [{
+  recipes: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Recipe',
-    autopopulate: true,
   }],
 },{
   timestamps: true,
