@@ -29,6 +29,25 @@
 
 ## Getting Started
 
+### User Accounts
+The system requires an account to be created prior to login.  Please use the create account button on the home page to create your account.  Once an account is created, you can login normally.  All user accounts require a Google hosted email address.
+
+### User Roles
+All accounts are defaulted to a user role.
+User Role: Can read/view a recipe and it's ingredients.
+Contributor Role: Can read/view and edit recipes and their ingredients.
+Admin Rold: Can read/view, edit, and delete recipes and users.
+
+### Recipes
+Recipes can be created by contributors for users to view.
+
+## Development Testing Rules
+Please do NOT delete any user account with an @herbaldashery.com email address.  This is an app in development for a client and they are testing the app as well.
+
 ## Unsolved Problems
 
+Need more styling to match with current website.
+
 ## Future Enhancements
+
+Nothing at this time.
