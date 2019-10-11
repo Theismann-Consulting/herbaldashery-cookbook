@@ -185,7 +185,7 @@ class MealPlanForm extends Component {
   }
 
   showRecipes(){
-    if(this.props.state.edit){
+    if(this.props.state && this.props.state.edit){
       return(
         <Form.Row>
           <Form.Group as={Col} controlId="formRecipe">

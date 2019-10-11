@@ -106,7 +106,7 @@ class App extends Component {
             )}/>    
             
             <Route exact path='/recipes' render={({ history }) => (
-              this.state.user.role === 'Admin' ?
+              this.state.user.role ?
               <RecipesPage
                 history={history}
                 user={this.state.user}
@@ -116,7 +116,7 @@ class App extends Component {
             )}/>    
 
             <Route exact path='/recipes/new' render={(props) => (
-              this.state.user.role === 'Admin' ?
+              this.state.user.role === 'Contributor' || this.state.user.role ==='Admin' ?
               <RecipeEditPage
                 {...props}
                 history={props.history}
@@ -127,7 +127,7 @@ class App extends Component {
             )}/>  
               
             <Route exact path='/recipes/:id' render={(props) => (
-              this.state.user.role === 'Admin' ?
+              this.state.user.role ?
               <RecipeViewPage
                 {...props}
                 history={props.history}
@@ -138,7 +138,7 @@ class App extends Component {
             )}/>      
 
             <Route exact path='/recipes/:id/edit' render={(props) => (
-              this.state.user.role === 'Admin' ?
+              this.state.user.role === 'Contributor' || this.state.user.role ==='Admin'?
               <RecipeEditPage
                 {...props}
                 history={props.history}
@@ -149,7 +149,7 @@ class App extends Component {
             )}/>    
 
             <Route exact path='/mealPlans' render={({ history }) => (
-              this.state.user.role === 'Admin' ?
+              this.state.user.role ?
               <MealPlansPage
                 history={history}
                 user={this.state.user}
@@ -159,7 +159,7 @@ class App extends Component {
             )}/>    
               
             <Route exact path='/mealPlans/:id' render={(props) => (
-              this.state.user.role === 'Admin' ?
+              this.state.user.role ?
               <MealPlanViewPage
                 {...props}
                 history={props.history}
@@ -170,7 +170,7 @@ class App extends Component {
             )}/>      
 
             <Route exact path='/mealPlans/:id/edit' render={(props) => (
-              this.state.user.role === 'Admin' ?
+              this.state.user.role === 'Contributor' || this.state.user.role ==='Admin' ?
               <MealPlanEditPage
                 {...props}
                 history={props.history}
@@ -181,7 +181,7 @@ class App extends Component {
             )}/>    
 
             <Route exact path='/categories' render={({ history }) => (
-              this.state.user.role === 'Admin' ?
+              this.state.user.role ?
               <CategoryPage
                 history={history}
                 user={this.state.user}
@@ -191,7 +191,7 @@ class App extends Component {
             )}/>    
               
             <Route exact path='/categories/:id' render={(props) => (
-              this.state.user.role === 'Admin' ?
+              this.state.user.role ?
               <CategoryViewPage
                 {...props}
                 history={props.history}
@@ -202,7 +202,7 @@ class App extends Component {
             )}/>      
 
             <Route exact path='/categories/:id/edit' render={(props) => (
-              this.state.user.role === 'Admin' ?
+              this.state.user.role === 'Contributor' || this.state.user.role ==='Admin' ?
               <CategoryEditPage
                 {...props}
                 history={props.history}
