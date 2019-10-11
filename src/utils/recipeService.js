@@ -1,32 +1,32 @@
 import tokenService from './tokenService';
 
-const BASE_URL = '/api/users/';
+const BASE_URL = '/api/recipes/';
 
-function signup(user) {
-  return fetch(BASE_URL + 'signup', {
+function create(recipe) {
+  return fetch(BASE_URL + '', {
     method: 'POST',
-    headers: new Headers({'Content-Type': 'application/json'}),
-    body: JSON.stringify(user)
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
+    body: JSON.stringify(recipe)
   })
   .then(res => {
+    console.log(res);
     if (res.ok) return res.json();
     // Probably a duplicate email
-    throw new Error('Email already taken!');
+    throw new Error('Unable to Create Recipe!');
   })
-  // Parameter destructuring!
-  .then(({token}) => tokenService.setToken(token));
-  // The above could have been written as
-  //.then((token) => token.token);
 }
 
-function update(user, userId) {
-  return fetch(BASE_URL + `${userId}`, {
+function update(recipe, recipeId) {
+  return fetch(BASE_URL + `${recipeId}`, {
     method: 'PUT',
     headers: new Headers({
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + tokenService.getToken()
     }),
-    body: JSON.stringify(user)
+    body: JSON.stringify(recipe)
   })
   .then(res => {
     if (res.ok) return res.json();
@@ -34,29 +34,7 @@ function update(user, userId) {
   })
 }
 
-function getCurrUser() {
-  return tokenService.getUserFromToken();
-}
-
-function logout() {
-  tokenService.removeToken();
-}
-
-function login(creds) {
-  return fetch(BASE_URL + 'login', {
-    method: 'POST',
-    headers: new Headers({'Content-Type': 'application/json'}),
-    body: JSON.stringify(creds)
-  })
-  .then(res => {
-    // Valid login if we have a status of 2xx (res.ok)
-    if (res.ok) return res.json();
-    throw new Error('Bad Credentials!');
-  })
-  .then(({token}) => tokenService.setToken(token));
-}
-
-function getUsers(){
+function getRecipes(){
   return fetch(BASE_URL + '', {
     method: 'get',
     headers: new Headers({
@@ -71,8 +49,8 @@ function getUsers(){
   });
 }
 
-function getUser(userId){
-  return fetch(BASE_URL + `${userId}`, {
+function getRecipe(recipeId){
+  return fetch(BASE_URL + `${recipeId}`, {
     method: 'get',
     headers: new Headers({
       'Content-Type': 'application/json',
@@ -86,8 +64,8 @@ function getUser(userId){
   });
 }
 
-function deleteUser(userId){
-  return fetch(BASE_URL + `${userId}`, {
+function deleteRecipe(recipeId){
+  return fetch(BASE_URL + `${recipeId}`, {
     method: 'delete',
     headers: new Headers({
       'Content-Type': 'application/json',
@@ -102,12 +80,9 @@ function deleteUser(userId){
 }
 
 export default {
-  signup, 
-  getCurrUser,
-  getUsers,
-  getUser,
-  logout,
-  login,
+  create, 
+  getRecipes,
+  getRecipe,
   update,
-  delete: deleteUser,
+  delete: deleteRecipe,
 };

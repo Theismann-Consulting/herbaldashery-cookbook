@@ -1,13 +1,69 @@
 const User = require('../models/user');
+const MealPlan = require('../models/mealPlan');
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.SECRET;
 
 module.exports = {
   signup,
-  login
+  login,
+  index,
+  update,
+  show,
+  delete :deleteUser
+};
+
+
+async function index(req, res, next) {
+  try {
+    await User.find({}, function (err, users){
+      res.json({ users });
+    });
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+async function show(req, res) {
+  try {
+    await User.findById(req.params.id)
+      .populate('MealPlan')
+      .exec(function(err, user) {
+        res.json({ user });
+    });
+  } catch(err) {
+    res.status(400).json(err);
+  }
+};
+
+async function update(req, res) {
+  await User.findById(req.params.id, function(err, user){
+    user.name = req.body.name;
+    user.email = req.body.email;
+    if(req.body.user > 0){user.password = req.body.password;}
+    user.role = req.body.role;
+    try {
+      user.save();
+      res.json({ user });
+    } catch(err) {
+      res.status(400).json(err);
+    }
+  });
+};
+
+async function deleteUser(req, res, next) {
+  try {
+    await User.findByIdAndDelete(req.params.id, function(err, user) {
+      MealPlan.findOneAndUpdate({assignedUsers: user._id}, {$pull: {assignedUsers: user._id}}, function(err, mealPlan){
+        res.json({ user, mealPlan });
+      });
+  });
+  } catch (err) {
+    res.status(400).json(err);
+  }
 };
 
 async function signup(req, res) {
+  console.log(req.body);
   const user = new User(req.body);
   try {
     await user.save();

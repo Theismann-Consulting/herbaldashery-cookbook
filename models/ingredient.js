@@ -2,12 +2,11 @@ const mongoose = require('mongoose');
 
 const ingredientsSchema = new mongoose.Schema({
   name: String,
-  amount: String,
   contributor: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  recipe: [{
+  recipes: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Recipe',
   }],
@@ -15,4 +14,5 @@ const ingredientsSchema = new mongoose.Schema({
   timestamps: true,
 });
 
+ingredientsSchema.plugin(require('mongoose-autopopulate'));
 module.exports = mongoose.model('Ingredient', ingredientsSchema);

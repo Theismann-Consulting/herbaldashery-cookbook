@@ -1,32 +1,31 @@
 import tokenService from './tokenService';
 
-const BASE_URL = '/api/users/';
+const BASE_URL = '/api/mealPlans/';
 
-function signup(user) {
-  return fetch(BASE_URL + 'signup', {
+function create(mealPlan) {
+  return fetch(BASE_URL + '', {
     method: 'POST',
-    headers: new Headers({'Content-Type': 'application/json'}),
-    body: JSON.stringify(user)
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    }),
+    body: JSON.stringify(mealPlan)
   })
   .then(res => {
     if (res.ok) return res.json();
     // Probably a duplicate email
-    throw new Error('Email already taken!');
+    throw new Error('Unable to Create Meal Plan!');
   })
-  // Parameter destructuring!
-  .then(({token}) => tokenService.setToken(token));
-  // The above could have been written as
-  //.then((token) => token.token);
 }
 
-function update(user, userId) {
-  return fetch(BASE_URL + `${userId}`, {
+function update(mealPlan, mealPlanId) {
+  return fetch(BASE_URL + `${mealPlanId}`, {
     method: 'PUT',
     headers: new Headers({
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + tokenService.getToken()
     }),
-    body: JSON.stringify(user)
+    body: JSON.stringify(mealPlan)
   })
   .then(res => {
     if (res.ok) return res.json();
@@ -34,29 +33,7 @@ function update(user, userId) {
   })
 }
 
-function getCurrUser() {
-  return tokenService.getUserFromToken();
-}
-
-function logout() {
-  tokenService.removeToken();
-}
-
-function login(creds) {
-  return fetch(BASE_URL + 'login', {
-    method: 'POST',
-    headers: new Headers({'Content-Type': 'application/json'}),
-    body: JSON.stringify(creds)
-  })
-  .then(res => {
-    // Valid login if we have a status of 2xx (res.ok)
-    if (res.ok) return res.json();
-    throw new Error('Bad Credentials!');
-  })
-  .then(({token}) => tokenService.setToken(token));
-}
-
-function getUsers(){
+function getMealPlans(){
   return fetch(BASE_URL + '', {
     method: 'get',
     headers: new Headers({
@@ -65,14 +42,13 @@ function getUsers(){
     }),
   })
   .then(res => {
-    // Valid login if we have a status of 2xx (res.ok)
     if (res.ok) return res.json();
     throw new Error('Not Authorized');
   });
 }
 
-function getUser(userId){
-  return fetch(BASE_URL + `${userId}`, {
+function getMealPlan(mealPlanId){
+  return fetch(BASE_URL + `${mealPlanId}`, {
     method: 'get',
     headers: new Headers({
       'Content-Type': 'application/json',
@@ -86,8 +62,8 @@ function getUser(userId){
   });
 }
 
-function deleteUser(userId){
-  return fetch(BASE_URL + `${userId}`, {
+function deleteMealPlan(mealPlanId){
+  return fetch(BASE_URL + `${mealPlanId}`, {
     method: 'delete',
     headers: new Headers({
       'Content-Type': 'application/json',
@@ -102,12 +78,9 @@ function deleteUser(userId){
 }
 
 export default {
-  signup, 
-  getCurrUser,
-  getUsers,
-  getUser,
-  logout,
-  login,
+  create, 
+  getMealPlans,
+  getMealPlan,
   update,
-  delete: deleteUser,
+  delete: deleteMealPlan,
 };

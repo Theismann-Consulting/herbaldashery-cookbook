@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
-import './LoginPage.css';
+import { Button, Container } from 'react-bootstrap';
 import userService from '../../utils/userService';
 
 class LoginPage extends Component {
   
   state = {
     email: '',
-    pw: ''
+    pw: '',
+    message: '',
   };
 
   handleChange = (e) => {
@@ -27,34 +27,40 @@ class LoginPage extends Component {
       // Successfully signed up - show GamePage
       this.props.history.push('/');
     } catch (err) {
-      // Use a modal or toast in your apps instead of alert
-      alert('Invalid Credentials!');
+      this.updateMessage(err.message);
     }
+  }
+
+  updateMessage = (msg) => {
+    this.setState({message: msg});
   }
 
   render() {
     return (
-      <div className="LoginPage">
-        <header className="header-footer">Log In</header>
-        <form className="form-horizontal" onSubmit={this.handleSubmit} >
-          <div className="form-group">
-            <div className="col-sm-12">
-              <input type="email" className="form-control" placeholder="Email" value={this.state.email} name="email" onChange={this.handleChange} />
+      <Container>
+        <div className="LoginPage">
+          <header className="header-footer">Log In</header>
+          <form className="form-horizontal" onSubmit={this.handleSubmit} >
+            <div className="form-group">
+              <div className="col-sm-12">
+                <input type="email" className="form-control" placeholder="Email" value={this.state.email} name="email" onChange={this.handleChange} />
+              </div>
             </div>
-          </div>
-          <div className="form-group">
-            <div className="col-sm-12">
-              <input type="password" className="form-control" placeholder="Password" value={this.state.pw} name="pw" onChange={this.handleChange} />
+            <div className="form-group">
+              <div className="col-sm-12">
+                <input type="password" className="form-control" placeholder="Password" value={this.state.pw} name="pw" onChange={this.handleChange} />
+              </div>
             </div>
-          </div>
-          <div className="form-group">
-            <div className="col-sm-12 text-center">
-            <Button type="submit" variant="success">Log In</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Link to='/'>Cancel</Link>
+            <div className="form-group">
+              <div className="col-sm-12 text-center">
+              <Button type="submit" variant="success">Log In</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <Link to='/'>Cancel</Link>
+              </div>
             </div>
-          </div>
-        </form>
-      </div>
+          </form>
+          <p>{this.state.message}</p>
+        </div>
+      </Container>
     );
   }
 }
