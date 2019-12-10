@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Logs
 logs
 *.log
@@ -174,6 +175,36 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+=======
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+
+# VS Code
+/.vscode
+
+>>>>>>> 003a2aef4995c9181147a526bb0f2dbfed1da5c0
 # Logs
 logs
 *.log
@@ -229,6 +260,15 @@ typings/
 # Optional eslint cache
 .eslintcache
 
+<<<<<<< HEAD
+=======
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+>>>>>>> 003a2aef4995c9181147a526bb0f2dbfed1da5c0
 # Optional REPL history
 .node_repl_history
 
@@ -251,6 +291,13 @@ typings/
 # nuxt.js build output
 .nuxt
 
+<<<<<<< HEAD
+=======
+# gatsby files
+.cache/
+public
+
+>>>>>>> 003a2aef4995c9181147a526bb0f2dbfed1da5c0
 # vuepress build output
 .vuepress/dist
 
@@ -262,3 +309,9 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+<<<<<<< HEAD
+=======
+
+# TernJS port file
+.tern-port
+>>>>>>> 003a2aef4995c9181147a526bb0f2dbfed1da5c0
