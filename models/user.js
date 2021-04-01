@@ -1,21 +1,4 @@
 const mongoose = require('mongoose');
-<<<<<<< HEAD
-
-const userSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    role: String,
-    avatar: String,
-    googleId: String,
-    active: {
-        type: Boolean,
-        default: true,
-    }
-}, {
-    timestamps: true
-});
-
-=======
 const bcrypt = require('bcrypt');
 
 const SALT_ROUNDS = 6;
@@ -70,5 +53,4 @@ userSchema.methods.comparePassword = function(tryPassword, cb) {
   bcrypt.compare(tryPassword, this.password, cb);
 };
 
->>>>>>> 003a2aef4995c9181147a526bb0f2dbfed1da5c0
 module.exports = mongoose.model('User', userSchema);
