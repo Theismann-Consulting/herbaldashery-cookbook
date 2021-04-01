@@ -17,6 +17,8 @@ import CategoryEditPage from '../CategoryEditPage/CategoryEditPage';
 import userService from '../../utils/userService';
 import Navigation from '../../components/Navigation/Navigation';
 import HomePage from '../../components/HomePage';
+import recipeService from '../../utils/recipeService';
+
 
 
 class App extends Component {
@@ -24,7 +26,7 @@ class App extends Component {
     super();
     this.state = {
       user: '',
-      // recipes: recipeService.getRecipes(),
+      recipes: recipeService.getRecipes(),
     }
   }
 
