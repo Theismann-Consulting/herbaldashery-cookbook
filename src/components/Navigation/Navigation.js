@@ -37,7 +37,7 @@ const Navigation = (props) => {
         <Nav className="mr-auto">
         </Nav>   
         <Link to='/login'><Button variant="secondary" className="nav-button">Log In</Button></Link>
-        <Link to='/signup'><Button variant="secondary" className="nav-button">Sign Up</Button></Link>
+        {/* <Link to='/signup'><Button variant="secondary" className="nav-button">Sign Up</Button></Link> */}
         
         <Form inline>
           <FormControl type="text" placeholder="Search" className="mr-sm-2" />
