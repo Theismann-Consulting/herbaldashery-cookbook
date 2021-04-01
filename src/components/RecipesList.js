@@ -6,7 +6,7 @@ function RecipesList(props){
 
   return(
       <Row className="justify-content-center">
-        {props.state.recipes.map((recipe, idx) =>
+        {props.state.recpies && props.state.recipes.map((recipe, idx) =>
         
         <Card style={{ width: '20rem' }}>
           {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}

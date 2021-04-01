@@ -79,10 +79,12 @@ function deleteRecipe(recipeId){
   });
 }
 
-export default {
+const recipeService = {
   create, 
   getRecipes,
   getRecipe,
   update,
   delete: deleteRecipe,
 };
+
+export default recipeService;

@@ -78,10 +78,12 @@ function deleteIngredient(ingredientId){
   });
 }
 
-export default {
-  create, 
-  getIngredients,
-  getIngredient,
-  update,
-  delete: deleteIngredient,
+const ingredientService = {
+ create, 
+ getIngredients,
+ getIngredient,
+ update,
+ delete: deleteIngredient,
 };
+
+export default ingredientService;

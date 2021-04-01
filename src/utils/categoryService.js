@@ -78,10 +78,12 @@ function deleteCategory(categoryId){
   });
 }
 
-export default {
+const categoryService = {
   create, 
   getCategories,
   getCategory,
   update,
   delete: deleteCategory,
 };
+
+export default categoryService;
