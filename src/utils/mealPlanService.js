@@ -77,10 +77,12 @@ function deleteMealPlan(mealPlanId){
   });
 }
 
-export default {
+const mealPlanService = {
   create, 
   getMealPlans,
   getMealPlan,
   update,
   delete: deleteMealPlan,
 };
+
+export default mealPlanService;

@@ -101,7 +101,7 @@ function deleteUser(userId){
   });
 }
 
-export default {
+const userService = {
   signup, 
   getCurrUser,
   getUsers,
@@ -111,3 +111,5 @@ export default {
   update,
   delete: deleteUser,
 };
+
+export default userService;
